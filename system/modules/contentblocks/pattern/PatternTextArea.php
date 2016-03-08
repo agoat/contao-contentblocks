@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * Contao Open Source CMS
+ * 
+ * Copyright (C) 2005-201 Leo Feyer
+ * 
+ * @package   Wrapper 
+ * @author    Arne Stappen 
+ * @license   LGPL 
+ * @copyright A. Stappen (2011-2015)
+ */
+
+ 
+namespace Contao;
+
+ 
+class PatternTextArea extends \Pattern
+{
+
+
+	/**
+	 * generate the DCA construct
+	 */
+	public function construct()
+	{
+		
+		parent::construct('text', array
+		(
+			'inputType' 	=>	'textarea',
+			'label'			=>	array($this->label, $this->description),
+			'eval'			=>	array
+			(
+				'mandatory'		=>	($this->mandatory) ? true : false, 
+				'tl_class'		=> 	'clr',
+				'rte'			=>	'tinyMCEpattern',
+				'preserveTags'	=>	true,
+			)
+		));
+		
+	}
+	
+
+	/**
+	 * Generate backend output
+	 */
+	public function view()
+	{
+		$strPreview = '<div class="" style="padding-top:10px;"><h3 style="margin: 0;"><label>' . $this->label . '</label></h3>';
+
+		$selector = 'ctrl_textarea' . $this->id;
+		$this->field = 'pre_' . $this->id;
+		
+		$strPreview .= '<textarea id="' . $selector . '" aria-hidden="true" class="tl_textarea noresize" rows="12" cols="80"></textarea>';
+		
+		ob_start();
+		include TL_ROOT . '/system/config/tinyMCEpattern.php';
+		$strPreview .= ob_get_contents();
+		ob_end_clean();
+			
+		$strPreview .= '<p title="" class="tl_help tl_tip">' . $this->description . '</p></div>';	
+
+		return $strPreview;
+	}
+
+
+	/**
+	 * prepare data for the frontend template 
+	 */
+	public function compile()
+	{
+		// prepare value(s)
+		
+		parent::compile($this->Value->text);
+	}
+	
+}
