@@ -1,14 +1,14 @@
 <?php
-
-/**
- * Contao Open Source CMS
+ 
+ /**
+ * Contao Open Source CMS - ContentBlocks extension
  *
- * Copyright (c) 2005-2015 Leo Feyer
+ * Copyright (c) 2016 Arne Stappen (aGoat)
  *
- * @package   ReadMore
- * @author    Arne
- * @license   GNU/LGPL
- * @copyright aGoat 2015
+ *
+ * @package   contentblocks
+ * @author    Arne Stappen <http://agoat.de>
+ * @license	  LGPL-3.0+
  */
 
 

@@ -1,4 +1,16 @@
 <?php
+ 
+ /**
+ * Contao Open Source CMS - ContentBlocks extension
+ *
+ * Copyright (c) 2016 Arne Stappen (aGoat)
+ *
+ *
+ * @package   contentblocks
+ * @author    Arne Stappen <http://agoat.de>
+ * @license	  LGPL-3.0+
+ */
+
 
 // content block edit button
 array_insert($GLOBALS['TL_DCA']['tl_theme']['list']['operations'], 3, array

@@ -1,17 +1,17 @@
 <?php
-
-/**
- * Contao Open Source CMS
- * 
- * Copyright (C) 2005-201 Leo Feyer
- * 
- * @package   Wrapper 
- * @author    Arne Stappen 
- * @license   LGPL 
- * @copyright A. Stappen (2011-2015)
+ 
+ /**
+ * Contao Open Source CMS - ContentBlocks extension
+ *
+ * Copyright (c) 2016 Arne Stappen (aGoat)
+ *
+ *
+ * @package   contentblocks
+ * @author    Arne Stappen <http://agoat.de>
+ * @license	  LGPL-3.0+
  */
 
- 
+
 namespace Contao;
 
  
