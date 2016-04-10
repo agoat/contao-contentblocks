@@ -21,6 +21,7 @@ class ContentBlocks extends \Controller
 	// add frontend stylesheets to backend
 	public function addPageLayoutToBE ($objTemplate)
 	{
+
 		// try to add frontend stylesheets
 		if (TL_MODE == 'BE')
 		{
@@ -28,6 +29,7 @@ class ContentBlocks extends \Controller
 			{
 				$strStylesheets = '';
 
+				
 				if (\Input::get('do') == 'article' && \Input::get('id') )
 				{
 					$objArticle = \ArticleModel::findByPk(\Input::get('id'));
@@ -41,6 +43,8 @@ class ContentBlocks extends \Controller
 					$objLayout = \LayoutModel::findById($objPage->layout);	
 				}
 				
+				// make objPage global
+				$GLOBALS['objPage'] = $objPage;
 				
 				// Make sure TL_USER_CSS is set
 				if (!is_array($GLOBALS['TL_USER_CSS']))
@@ -121,8 +125,12 @@ class ContentBlocks extends \Controller
 					$GLOBALS['TL_USER_CSS'] = array_merge($GLOBALS['TL_USER_CSS'], $GLOBALS['TL_CB_CSS']);
 				}
 
-				$objTemplate->stylesheets .= $this->replaceDynamicScriptTags('[[TL_CSS]]');
-
+				// add the main.css to overwrite styles again to the right backend theme style
+				$GLOBALS['TL_USER_CSS'][] = 'system/themes/'. $objTemplate->theme .'/main.css|static';
+				$GLOBALS['TL_USER_CSS'][] = 'system/modules/contentblocks/assets/main.css|static';
+				
+				$objTemplate->stylesheets = $this->replaceDynamicScriptTags('[[TL_CSS]]');
+				
 			}
 
 		}
