@@ -5,7 +5,6 @@
 /* style for visual element selection */
 .chzn-container .chzn-results{max-height: 346px;}
 
-
 /* standard contao template overwrite to show the backend the right way */
 #main h1.main_headline, #tl_navigation h1, #header h1 {font-size: 0.75rem;}
 #tl_navigation img, .tl_listing_container .tl_content_right img {width: auto;}
