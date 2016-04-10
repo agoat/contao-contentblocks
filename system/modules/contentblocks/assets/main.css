@@ -1,0 +1,5 @@
+/* main contao template overwrite to show the backend the right way */
+#header {padding: 0; box-sizing: content-box;}
+#container {background: transparent; margin: 0 auto; padding: 0; box-sizing: content-box;}
+#main {background: #fff; margin: auto; margin-left: 10px; padding: 1px; box-sizing: content-box;}
+#left {margin: 0; box-sizing: content-box;}
