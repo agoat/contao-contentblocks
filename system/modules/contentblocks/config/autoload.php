@@ -32,7 +32,6 @@ ClassLoader::addClasses(array
 	'Contao\\ContentPatternModel'	=> 'system/modules/contentblocks/models/ContentPatternModel.php',
 	'Contao\\ContentValueModel'		=> 'system/modules/contentblocks/models/ContentValueModel.php',
 
-
 	// Pattern
 	'Contao\\PatternTextField'		=> 'system/modules/contentblocks/pattern/PatternTextField.php',
 	'Contao\\PatternTextArea'		=> 'system/modules/contentblocks/pattern/PatternTextArea.php',
@@ -52,18 +51,10 @@ ClassLoader::addClasses(array
 	'Contao\\PatternComment'		=> 'system/modules/contentblocks/pattern/PatternComment.php',
 	'Contao\\PatternModule'			=> 'system/modules/contentblocks/pattern/PatternModule.php',
 
-	
 	// Widgets
 	'Contao\\FileTree'				=> 'system/modules/contentblocks/widgets/FileTree.php', // overwrite FileTree widget
 	'Contao\\Explanation'			=> 'system/modules/contentblocks/widgets/Explanation.php', // new explanation widget (text for backend)
 	'Contao\\VisualSelectMenu'		=> 'system/modules/contentblocks/widgets/VisualSelectMenu.php', // new select menu with images
-
-	
-	// Modules
-//	'Contao\\ModuleLogin'			=> 'system/modules/contentblocks/modules/ModulesLogin.php', // overwrite Form class (no wildcard output in backend)
-	
-	// Forms
-//	'Contao\\Form'					=> 'system/modules/contentblocks/forms/Form.php', // overwrite Form class (no wildcard output in backend)
 	
 ));
 

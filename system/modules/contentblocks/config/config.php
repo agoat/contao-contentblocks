@@ -62,11 +62,6 @@ $GLOBALS['TL_CTP'] = array
 	),
 );
 
-// add only if comment module is present
-if (array_key_exists('Contao\Comments', \ClassLoader::getClasses()))
-{
-//	$GLOBALS['TL_CTP']['system']['comment']	= 'PatternComment';
-}
 
 
 /**
