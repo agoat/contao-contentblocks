@@ -26,7 +26,8 @@ class ContentBlocks extends \Controller
 		// try to add frontend stylesheets
 		if (TL_MODE == 'BE')
 		{
-			if (\Config::get('loadCSSintoBE') && $objTemplate->getName() == 'be_main' && Input::get('table') == 'tl_content' && !\Input::get('act'))
+	
+		if (\Config::get('loadCSSintoBE') && $objTemplate->getName() == 'be_main' && Input::get('table') == 'tl_content' && !\Input::get('act'))
 			{
 				$strStylesheets = '';
 
@@ -126,8 +127,7 @@ class ContentBlocks extends \Controller
 					$GLOBALS['TL_USER_CSS'] = array_merge($GLOBALS['TL_USER_CSS'], $GLOBALS['TL_CB_CSS']);
 				}
 
-				// add the main.css to overwrite styles again to the right backend theme style
-				$GLOBALS['TL_USER_CSS'][] = 'system/themes/'. $objTemplate->theme .'/main.css|static';
+				// overwrite some styles again for a correect backend layout
 				$GLOBALS['TL_USER_CSS'][] = 'system/modules/contentblocks/assets/main.css|static';
 				
 				$objTemplate->stylesheets = $this->replaceDynamicScriptTags('[[TL_CSS]]');
