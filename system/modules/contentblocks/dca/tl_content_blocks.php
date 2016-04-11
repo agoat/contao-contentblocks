@@ -253,7 +253,7 @@ class tl_content_blocks extends Backend
 				$key = $arrRow['invisible'] ? 'unpublished' : 'published';
 				$strDefault = ($arrRow['defaultType']) ? '<span style="color:#b3b3b3;padding-left:8px">(Standard element)</span>' : '';
 				$objImg = \FilesModel::findByUuid($arrRow['singleSRC']);
-				return '<div class="cte_type ctb_element ' . $key . '" style="margin: 0; padding: 0 0 0 70px; line-height: 41px;"><div class="cte_img" style="position: absolute; left: 6px; top: 6px; width: 60px; height: 40px; border: 1px solid #ccc; background: #eee url('.$objImg->path.'); background-size: 60px 40px;}"></div>' . $arrRow['title'] . $strDefault . '</div>';
+				return '<div class="cte_type ctb_element ' . $key . '" style="position: relative; margin: 0; padding: 0 0 0 80px; line-height: 41px; pointer-events: none;"><div class="cte_img" style="position: absolute; left: 6px; top: 0px; width: 60px; height: 40px; border: 1px solid #ccc; background: #eee url('.$objImg->path.'); background-size: 60px 40px;}"></div>' . $arrRow['title'] . $strDefault . '</div>';
 		}
 	}
 
