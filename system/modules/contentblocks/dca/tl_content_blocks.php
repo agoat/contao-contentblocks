@@ -110,7 +110,7 @@ $GLOBALS['TL_DCA']['tl_content_blocks'] = array
 		'__selector__'			=> array('type'),
 		'default'				=> '{type_legend},type',
 		'group'					=> '{type_legend},type;{group_legend},title',
-		'element'				=> '{type_legend},type;{element_legend},title,description,singleSRC;{html_legend},template;{default_legend},defaultType;{invisible_legend},invisible'
+		'element'				=> '{type_legend},type;{element_legend},title,description,singleSRC;{html_legend},template,stylesheet;{default_legend},defaultType;{invisible_legend},invisible'
 	),
 	// Fields
 	'fields' => array

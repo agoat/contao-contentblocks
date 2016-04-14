@@ -13,7 +13,7 @@
 
 
 // legacy mode
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = str_replace('maintenanceMode', 'maintenanceMode;{elements_legend},overwriteCTE,loadCSSintoBE', $GLOBALS['TL_DCA']['tl_settings']['palettes']['default']);
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = str_replace('maintenanceMode', 'maintenanceMode;{elements_legend},overwriteCTE', $GLOBALS['TL_DCA']['tl_settings']['palettes']['default']);
 
 // more file types
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = str_replace('validImageTypes', 'validImageTypes,validVideoTypes,validAudioTypes', $GLOBALS['TL_DCA']['tl_settings']['palettes']['default']);

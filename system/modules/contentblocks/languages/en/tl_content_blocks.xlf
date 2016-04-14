@@ -52,10 +52,10 @@
 				<source>Select the template file for the content block element.</source>
 			</trans-unit>
 			<trans-unit id="tl_content_blocks.stylesheet.0">
-				<source>Block stylesheet</source>
+				<source>Backend stylesheet</source>
 			</trans-unit>
 			<trans-unit id="tl_content_blocks.stylesheet.1">
-				<source>Select a stylesheet file for the content block element.</source>
+				<source>Select a stylesheet file (css, scss or less) for the backend display of the content block element.</source>
 			</trans-unit>
 
 

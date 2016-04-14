@@ -85,14 +85,17 @@ class ContentBlockElement extends \ContentElement
 		$this->strTemplate = $this->objBlock->template;
 		
 		
-		// set the stylesheet file
-		$objFile = \FilesModel::findByPk($this->objBlock->stylesheet);
-		
-		if ($objFile !== null)
+		// add the contentblocks backend stylesheets
+		if (TL_MODE == 'BE')
 		{
-			$GLOBALS['TL_CB_CSS'][] = $objFile->path . '|static';
+			$objFile = \FilesModel::findByPk($this->objBlock->stylesheet);
+		
+			if ($objFile !== null)
+			{
+				$GLOBALS['TL_CB_CSS'][] = $objFile->path . '|static';
+			}
 		}
-
+		
 		
 		// content element output
 		if (TL_MODE == 'FE' && !BE_USER_LOGGED_IN && ($this->invisible || ($this->start != '' && $this->start > time()) || ($this->stop != '' && $this->stop < time())))

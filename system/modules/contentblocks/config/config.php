@@ -26,8 +26,6 @@ $GLOBALS['TL_HOOKS']['getPageLayout'][] = array('ContentBlocks','loadAndRegister
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('ContentBlocks','loadAndRegisterElementsWithGroups');
 
 $GLOBALS['TL_HOOKS']['parseTemplate'][] = array('ContentBlocks','addPageLayoutToBE');
-$GLOBALS['TL_HOOKS']['parseTemplate'][] = array('ContentBlocks','addContentBlockCSS');
-
 
 
 /**
