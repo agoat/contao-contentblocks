@@ -27,7 +27,7 @@ class PatternTextField extends \Pattern
 		
 		
 		$class = ($this->classClr) ? 'w50 clr' : 'w50';
-		$class .= ($this->classLong) ? ' long' : '';
+		$class = ($this->classLong) ? 'long clr' : $class;
 		$class .= ($this->picker) ? ' wizard' : '';
 		
 		$wizard = ($this->picker == 'page') ? array(array('tl_content', 'pagePicker')) : false;
