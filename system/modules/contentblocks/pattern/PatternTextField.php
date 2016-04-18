@@ -131,7 +131,7 @@ class PatternTextField extends \Pattern
 	 */
 	public function compile()
 	{
-		parent::compile(deserialize($this->Value->textField));	
+		parent::compile(($this->multiple) ? deserialize($this->Value->multiField) : $this->Value->textField);	
 	}
 	
 }
