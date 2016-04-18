@@ -110,6 +110,7 @@ $GLOBALS['TL_DCA']['tl_content_pattern'] = array
 		// input
 		'textfield'					  => '{type_legend},type;{textfield_legend},minLength,maxLength,rgxp,defaultValue,multiple,picker;{label_legend},label,description;{pattern_legend},alias,mandatory,classClr,classLong;{invisible_legend},invisible',
 		'textarea'					  => '{type_legend},type;{textarea_legend},rteTemplate;{label_legend},label,description;{pattern_legend},alias,mandatory,;{invisible_legend},invisible',
+		'code'					  => '{type_legend},type;{code_legend},highlight;{label_legend},label,description;{pattern_legend},alias,mandatory,;{invisible_legend},invisible',
 		'selectfield'				  => '{type_legend},type;{select_legend},options,multiSelect;{label_legend},label,description;{pattern_legend},alias,mandatory,classClr;{invisible_legend},invisible',
 		'checkbox'					  => '{type_legend},type;{label_legend},label,description;{pattern_legend},alias,mandatory,classClr;{invisible_legend},invisible',
 		'listwizard'				  => '{type_legend},type;{label_legend},label,description;{pattern_legend},alias,mandatory;{invisible_legend},invisible',
@@ -343,6 +344,16 @@ $GLOBALS['TL_DCA']['tl_content_pattern'] = array
 			'sql'                     => "varchar(64) NOT NULL default ''"
 		),
 
+		'highlight' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_content_pattern']['highlight'],
+			'exclude'                 => true,
+			'inputType'               => 'select',
+			'options'                 => array('html', 'html5', 'xml', 'javascript', 'css', 'scss', 'php', 'json'),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_content_pattern'],
+			'eval'                    => array('includeBlankOption'=>true, 'tl_class'=>'w50'),
+			'sql'                     => "varchar(32) NOT NULL default ''"
+		),
 
 
 		'source' => array

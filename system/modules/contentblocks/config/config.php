@@ -42,6 +42,7 @@ $GLOBALS['TL_CTP'] = array
 		'filetree'		=> 'PatternFileTree',
 		'listwizard'	=> 'PatternListWizard',
 		'tablewizard'	=> 'PatternTableWizard',
+		'code'			=> 'PatternCode',
 	),
 	'layout' => array
 	(

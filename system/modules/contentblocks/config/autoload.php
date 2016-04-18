@@ -32,6 +32,7 @@ ClassLoader::addClasses(array
 	// Pattern
 	'Contao\\PatternTextField'		=> 'system/modules/contentblocks/pattern/PatternTextField.php',
 	'Contao\\PatternTextArea'		=> 'system/modules/contentblocks/pattern/PatternTextArea.php',
+	'Contao\\PatternCode'			=> 'system/modules/contentblocks/pattern/PatternCode.php',
 	'Contao\\PatternSelectField'	=> 'system/modules/contentblocks/pattern/PatternSelectField.php',
 	'Contao\\PatternCheckBox'		=> 'system/modules/contentblocks/pattern/PatternCheckBox.php',
 	'Contao\\PatternListWizard'		=> 'system/modules/contentblocks/pattern/PatternListWizard.php',
