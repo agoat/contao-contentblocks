@@ -61,6 +61,12 @@
 			<trans-unit id="CTP.tablewizard.1">
 				<source>Insert a table wizard.</source>
 			</trans-unit>
+			<trans-unit id="CTP.code.0">
+				<source>Code</source>
+			</trans-unit>
+			<trans-unit id="CTP.code.1">
+				<source>Insert a highlighted code input field.</source>
+			</trans-unit>
 
 			<trans-unit id="CTP.section.0">
 				<source>Section</source>

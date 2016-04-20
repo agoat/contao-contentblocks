@@ -33,7 +33,7 @@ class PatternCode extends \Pattern
 			(
 				'mandatory'		=>	($this->mandatory) ? true : false, 
 				'tl_class'		=> 	'clr',
-				'rte'			=>	'ace|'.$this->highlight,
+				'rte'			=>	'ace|'.strtolower($this->highlight),
 				'preserveTags'	=>	true,
 			)
 		));
@@ -49,12 +49,11 @@ class PatternCode extends \Pattern
 		$strPreview = '<div class="" style="padding-top:10px;"><h3 style="margin: 0;"><label>' . $this->label . '</label></h3>';
 
 		$selector = 'ctrl_textarea' . $this->id;
-		$this->field = 'pre_' . $this->id;
-		
+		$type = strtolower($this->highlight);
+
 		$strPreview .= '<textarea id="' . $selector . '" aria-hidden="true" class="tl_textarea noresize" rows="12" cols="80"></textarea>';
 		
 		ob_start();
-		$type = $this->highlight;
 		include TL_ROOT . '/system/config/ace.php';
 		$strPreview .= ob_get_contents();
 		ob_end_clean();

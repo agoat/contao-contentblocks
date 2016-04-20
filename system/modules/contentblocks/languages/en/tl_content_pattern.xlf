@@ -292,6 +292,17 @@
 			</trans-unit>
 
 			
+			<trans-unit id="tl_content_pattern.code_legend">
+				<source>Code settings</source>
+			</trans-unit>
+			<trans-unit id="tl_content_pattern.highlight.0">
+				<source>Syntax highlighting</source>
+			</trans-unit>
+			<trans-unit id="tl_content_pattern.highlight.1">
+				<source>Select a scripting language.</source>
+			</trans-unit>
+
+
 			<trans-unit id="tl_content_pattern.form_legend">
 				<source>Form settings</source>
 			</trans-unit>
