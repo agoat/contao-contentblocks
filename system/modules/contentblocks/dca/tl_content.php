@@ -14,16 +14,16 @@
 
 
 // table callbacks
-$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_content_change', 'buildPaletteAndFields');
-$GLOBALS['TL_DCA']['tl_content']['config']['onsubmit_callback'][] = array('tl_content_change', 'savePatternFields');
+$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_content_element', 'buildPaletteAndFields');
+$GLOBALS['TL_DCA']['tl_content']['config']['onsubmit_callback'][] = array('tl_content_element', 'savePatternFields');
 
-$GLOBALS['TL_DCA']['tl_content']['config']['ondelete_callback'][] = array('tl_content_change', 'deleteRelatedValues');
-$GLOBALS['TL_DCA']['tl_content']['config']['oncopy_callback'][] = array('tl_content_change', 'copyRelatedValues');
+$GLOBALS['TL_DCA']['tl_content']['config']['ondelete_callback'][] = array('tl_content_element', 'deleteRelatedValues');
+$GLOBALS['TL_DCA']['tl_content']['config']['oncopy_callback'][] = array('tl_content_element', 'copyRelatedValues');
 
-$GLOBALS['TL_DCA']['tl_content']['config']['onversion_callback'][] = array('tl_content_change', 'newRelatedValuesVersion');
-$GLOBALS['TL_DCA']['tl_content']['config']['onrestore_callback'][] = array('tl_content_change', 'restoreRelatedValues');
+$GLOBALS['TL_DCA']['tl_content']['config']['onversion_callback'][] = array('tl_content_element', 'newRelatedValuesVersion');
+$GLOBALS['TL_DCA']['tl_content']['config']['onrestore_callback'][] = array('tl_content_element', 'restoreRelatedValues');
 
-$GLOBALS['TL_DCA']['tl_content']['list']['sorting']['child_record_callback'] = array('tl_content_change', 'addCteType');
+$GLOBALS['TL_DCA']['tl_content']['list']['sorting']['child_record_callback'] = array('tl_content_element', 'addCteType');
 
 // remove some filter options
 $GLOBALS['TL_DCA']['tl_content']['fields']['guests']['filter'] = false;
@@ -34,16 +34,16 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['type']['inputType'] = 'visualselect'
 
 
 // new options callback to get new content block elements
-$GLOBALS['TL_DCA']['tl_content']['fields']['type']['options_callback'] = array('tl_content_change', 'getContentElements');
+$GLOBALS['TL_DCA']['tl_content']['fields']['type']['options_callback'] = array('tl_content_element', 'getContentElements');
 
 // set new default element
-$GLOBALS['TL_DCA']['tl_content']['fields']['type']['load_callback'] = array(array('tl_content_change', 'setDefaultType'));
+$GLOBALS['TL_DCA']['tl_content']['fields']['type']['load_callback'] = array(array('tl_content_element', 'setDefaultType'));
 $GLOBALS['TL_DCA']['tl_content']['fields']['type']['default'] = false;
 
 
 
 
-class tl_content_change extends tl_content
+class tl_content_element extends tl_content
 {
 	
 	
@@ -92,14 +92,14 @@ class tl_content_change extends tl_content
 		// don´t try to add content block elements if nothing exists
 		if (\Config::get('overwriteCTE') && isset($GLOBALS['TL_CTB']))
 		{
-			$arrCTE = $GLOBALS['TL_CTB'][$this->getThemeId($dc->activeRecord->ptable, $dc->activeRecord->pid)];
+			$arrCTE = $GLOBALS['TL_CTB'][\ContentBlocks::getThemeId($dc->activeRecord->ptable, $dc->activeRecord->pid)];
 		}
 		else
 		{
 			$arrCTE = $GLOBALS['TL_CTE'];
 
 			unset($arrCTE['ctb']);
-			array_insert($arrCTE, 0, $GLOBALS['TL_CTB'][$this->getThemeId($dc->activeRecord->ptable, $dc->activeRecord->pid)]);
+			array_insert($arrCTE, 0, $GLOBALS['TL_CTB'][\ContentBlocks::getThemeId($dc->activeRecord->ptable, $dc->activeRecord->pid)]);
 		}
 		
 		// legacy support
@@ -129,7 +129,7 @@ class tl_content_change extends tl_content
 		{
 			$objContent = \ContentModel::findByPk($dc->id);
 				
-			$objContent->type = (isset($GLOBALS['TL_CTB'])) ? $GLOBALS['TL_CTB_DEFAULT'][$this->getThemeId($dc->activeRecord->ptable,  $dc->activeRecord->pid)] : "text";
+			$objContent->type = (isset($GLOBALS['TL_CTB'])) ? $GLOBALS['TL_CTB_DEFAULT'][\ContentBlocks::getThemeId($dc->activeRecord->ptable,  $dc->activeRecord->pid)] : "text";
 			$objContent->save();
 				
 			$this->redirect(\Environment::get('request'));
@@ -527,20 +527,23 @@ class tl_content_change extends tl_content
 	
 	
 	/**
-	 * get theme id for content element
+	 * get theme id for a content element
+	 *
+	 * @param string  $strTable The name of the table (article or news) 
+	 * @param integer $intId    A article or news ID
 	 */
-	public static function getThemeId ($strTable, $intPid)
+	public static function getThemeId ($strTable, $intId)
 	{
 		if ($strTable == 'tl_article')
 		{
-			$objArticle = \ArticleModel::findById($intPid);
+			$objArticle = \ArticleModel::findById($intId);
 			$objPage = \PageModel::findWithDetails($objArticle->pid);
 			$objLayout = \LayoutModel::findById($objPage->layout);	
 			return $objLayout->pid;
 		}
 		elseif($strTable == 'tl_news')
 		{
-			$objNews = \NewsModel::findById($intPid);
+			$objNews = \NewsModel::findById($intId);
 			$objPage = \PageModel::findWithDetails($objNews->getRelated('pid')->jumpTo);
 			$objLayout = \LayoutModel::findById($objPage->layout);	
 			return $objLayout->pid;
@@ -553,10 +556,10 @@ class tl_content_change extends tl_content
 				foreach ($GLOBALS['TL_HOOKS']['getThemeId'] as $callback)
 				{
 					$this->import($callback[0]);
-					$strBuffer = $this->{$callback[0]}->{$callback[1]}($strTable, $intPid);
+					$intId = $this->{$callback[0]}->{$callback[1]}($strTable, $intId);
 				}
 			}
-			return $strBuffer;
+			return $intId;
 		}
 	
 	}

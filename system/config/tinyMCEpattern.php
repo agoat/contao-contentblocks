@@ -11,17 +11,29 @@
  * @license	  LGPL-3.0+
  */
 
-
+// get pattern object
 $id = explode('_', $this->field);
 $objPattern = \ContentPatternModel::findOneById($id[1]);
 
-if ($objPattern === null)
+// get theme object
+if ($this instanceof Contao\PatternTextArea) 
 {
-	include(\TemplateLoader::getPath('tinymce_simple','html5'));
+	$objBlock = \ContentBlocksModel::findOneById($this->pid);
+	$objTheme = \ThemeModel::findOneById($objBlock->pid);
 }
 else
 {
-	include(\TemplateLoader::getPath($objPattern->rteTemplate,'html5'));
+	$objTheme = \ThemeModel::findOneById(\ContentBlocks::getThemeId($this->activeRecord->ptable, $this->activeRecord->pid));
+}
+
+
+if ($objPattern === null)
+{
+	include(\TemplateLoader::getPath('tinymce_simple', 'html5'));
+}
+else
+{
+	include(\TemplateLoader::getPath($objPattern->rteTemplate, 'html5', $objTheme->templates));
 }
 
 ?>

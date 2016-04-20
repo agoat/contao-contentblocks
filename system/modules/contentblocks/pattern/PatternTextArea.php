@@ -24,7 +24,6 @@ class PatternTextArea extends \Pattern
 	 */
 	public function construct()
 	{
-		
 		parent::construct('text', array
 		(
 			'inputType' 	=>	'textarea',
