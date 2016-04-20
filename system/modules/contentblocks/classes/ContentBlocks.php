@@ -159,6 +159,46 @@ class ContentBlocks extends \Controller
 
 	}
 
+	
+	/**
+	 * Get the theme ID for an article
+	 *
+	 * @param string  $strTable The name of the table (article or news) 
+	 * @param integer $intId    An article or a news article ID
+	 *
+	 * @return integer The theme ID
+	 */
+	public static function getThemeId ($strTable, $intId)
+	{
+		if ($strTable == 'tl_article')
+		{
+			$objArticle = \ArticleModel::findById($intId);
+			$objPage = \PageModel::findWithDetails($objArticle->pid);
+			$objLayout = \LayoutModel::findById($objPage->layout);	
+			return $objLayout->pid;
+		}
+		elseif($strTable == 'tl_news')
+		{
+			$objNews = \NewsModel::findById($intId);
+			$objPage = \PageModel::findWithDetails($objNews->getRelated('pid')->jumpTo);
+			$objLayout = \LayoutModel::findById($objPage->layout);	
+			return $objLayout->pid;
+		}
+		else
+		{
+			// HOOK: custom method to discover the theme
+			if (isset($GLOBALS['TL_HOOKS']['getThemeId']) && is_array($GLOBALS['TL_HOOKS']['getThemeId']))
+			{
+				foreach ($GLOBALS['TL_HOOKS']['getThemeId'] as $callback)
+				{
+					$this->import($callback[0]);
+					$intId = $this->{$callback[0]}->{$callback[1]}($strTable, $intId);
+				}
+			}
+			return $intId;
+		}
+	
+	}
 
 	
 }

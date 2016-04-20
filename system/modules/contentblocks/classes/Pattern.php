@@ -52,17 +52,7 @@ abstract class Pattern extends \Controller
 	*/
 	public function __construct($objPattern)
 	{
-		if ($objPattern instanceof \Model)
-		{
-			$this->objPattern = $objPattern;
-		}
-		elseif ($objPattern instanceof \Model\Collection)
-		{
-			$this->objPattern = $objPattern->current();
-		}
-
 		$this->arrData = $objPattern->row();
-
 	} 
 
 	/**
@@ -138,12 +128,12 @@ abstract class Pattern extends \Controller
 			// load default value
 			if ($arrFieldDCA['default'])
 			{
-				array_unshift($arrFieldDCA['load_callback'], array('tl_content_change', 'defaultValue'));
+				array_unshift($arrFieldDCA['load_callback'], array('tl_content_element', 'defaultValue'));
 			}
 
 			// load/save database values first/last
-			array_unshift($arrFieldDCA['load_callback'], array('tl_content_change', 'loadFieldValue'));
-			array_push($arrFieldDCA['save_callback'], array('tl_content_change', 'saveFieldAndClear'));
+			array_unshift($arrFieldDCA['load_callback'], array('tl_content_element', 'loadFieldValue'));
+			array_push($arrFieldDCA['save_callback'], array('tl_content_element', 'saveFieldAndClear'));
 		}
 
 		// add to palette
