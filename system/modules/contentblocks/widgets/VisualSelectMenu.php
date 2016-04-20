@@ -138,8 +138,15 @@ class VisualSelectMenu extends \Widget
 										 $this->isSelected($arrOption),
 										 $arrOption['label']);
 										 
-				$objImg = \FilesModel::findByUuid($GLOBALS['TL_CTB_IMG'][$arrOptgroup['value']]);					   
-				$strStyle .= '#ctrl_type_chzn_o_'.$count.' {position: relative; padding-left: 90px; line-height: 41px;}#ctrl_type_chzn_o_'.$count++.'::before {content: ""; position: absolute; left: 20px; top: 2px; width: 60px; height: 40px; border: 1px solid #ccc; background: #eee url('.$objImg->path.'); background-size: 60px 40px;}';
+				$objImage = \FilesModel::findByUuid($GLOBALS['TL_CTB_IMG'][$arrOptgroup['value']]);
+				if ($objImage === null)
+				{
+					$strStyle .= '#ctrl_type_chzn_o_'.$count.' {position: relative; padding-left: 90px; line-height: 41px;}#ctrl_type_chzn_o_'.$count++.'::before {content: ""; position: absolute; left: 20px; top:2px; width: 60px; height: 40px; border: 1px solid #ccc; background: #eee; background-size: 60px 40px;}';
+				}
+				else
+				{
+					$strStyle .= '#ctrl_type_chzn_o_'.$count.' {position: relative; padding-left: 90px; line-height: 41px;}#ctrl_type_chzn_o_'.$count++.'::before {content: ""; position: absolute; left: 20px; top:2px; width: 60px; height: 40px; border: 1px solid #ccc; background: #eee url('.$objImage->path.'); background-size: 60px 40px;}';
+				}
 			}
 			else
 			{
@@ -152,8 +159,15 @@ class VisualSelectMenu extends \Widget
 											   $this->isSelected($arrOptgroup),
 											   $arrOptgroup['label']);
 
-					$objImg = \FilesModel::findByUuid($GLOBALS['TL_CTB_IMG'][$arrOptgroup['value']]);					   
-					$strStyle .= '#ctrl_type_chzn_o_'.$count.' {position: relative; padding-left: 90px; line-height: 41px;}#ctrl_type_chzn_o_'.$count++.'::before {content: ""; position: absolute; left: 20px; top:2px; width: 60px; height: 40px; border: 1px solid #ccc; background: #eee url('.$objImg->path.'); background-size: 60px 40px;}';
+					$objImage = \FilesModel::findByUuid($GLOBALS['TL_CTB_IMG'][$arrOptgroup['value']]);
+					if ($objImage === null)
+					{
+						$strStyle .= '#ctrl_type_chzn_o_'.$count.' {position: relative; padding-left: 90px; line-height: 41px;}#ctrl_type_chzn_o_'.$count++.'::before {content: ""; position: absolute; left: 20px; top:2px; width: 60px; height: 40px; border: 1px solid #ccc; background: #eee; background-size: 60px 40px;}';
+					}
+					else
+					{
+						$strStyle .= '#ctrl_type_chzn_o_'.$count.' {position: relative; padding-left: 90px; line-height: 41px;}#ctrl_type_chzn_o_'.$count++.'::before {content: ""; position: absolute; left: 20px; top:2px; width: 60px; height: 40px; border: 1px solid #ccc; background: #eee url('.$objImage->path.'); background-size: 60px 40px;}';
+					}
 
 				}
 
