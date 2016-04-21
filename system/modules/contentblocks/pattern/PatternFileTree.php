@@ -87,11 +87,11 @@ class PatternFileTree extends \Pattern
 				),
 				'load_callback'		=> (!$orderField) ?: array
 				(
-					array('tl_content_change', 'prepareOrderSRCValue'),
+					array('tl_content_element', 'prepareOrderSRCValue'),
 				),
 				'save_callback'		=> (!$orderField) ?: array
 				(
-					array('tl_content_change', 'saveOrderSRCValue'),
+					array('tl_content_element', 'saveOrderSRCValue'),
 				),
 			));
 			
