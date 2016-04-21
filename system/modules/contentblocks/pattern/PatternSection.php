@@ -25,9 +25,9 @@ class PatternSection extends \Pattern
 	public function construct()
 	{
 
-		$GLOBALS['TL_DCA']['tl_content']['palettes'][$this->alias] .= ';{section_'.$this->id . (($this->objPattern->hidden) ? ':hide' : ''). '}';
-		$GLOBALS['TL_LANG']['tl_content']['section_'.$this->id] = $this->objPattern->label;
-	
+		$GLOBALS['TL_DCA']['tl_content']['palettes'][$this->alias] .= ';{section_'.$this->id . (($this->hidden) ? ':hide' : ''). '}';
+		$GLOBALS['TL_LANG']['tl_content']['section_'.$this->id] = $this->label;
+
 	}
 
 

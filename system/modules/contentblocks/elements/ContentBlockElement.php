@@ -107,12 +107,12 @@ class ContentBlockElement extends \ContentElement
 		$this->Template->setData($this->arrData);
 		$this->Template->inColumn = $this->strColumn;
 
-		$this->compile();
-
 		if (!empty($this->objModel->classes) && is_array($this->objModel->classes))
 		{
 			$this->Template->class .= ' ' . implode(' ', $this->objModel->classes);
 		}
+
+		$this->compile();
 
 		return $this->Template->parse();
 	}
