@@ -62,7 +62,7 @@ class tl_content_element extends tl_content
 	
 	
 	/**
-	 * Add the type of content element
+	 * Mark content element if content block is invisible
 	 *
 	 * @param array $arrRow
 	 *
@@ -524,45 +524,6 @@ class tl_content_element extends tl_content
 	}
 
 
-	
-	
-	/**
-	 * get theme id for a content element
-	 *
-	 * @param string  $strTable The name of the table (article or news) 
-	 * @param integer $intId    A article or news ID
-	 */
-	public static function getThemeId ($strTable, $intId)
-	{
-		if ($strTable == 'tl_article')
-		{
-			$objArticle = \ArticleModel::findById($intId);
-			$objPage = \PageModel::findWithDetails($objArticle->pid);
-			$objLayout = \LayoutModel::findById($objPage->layout);	
-			return $objLayout->pid;
-		}
-		elseif($strTable == 'tl_news')
-		{
-			$objNews = \NewsModel::findById($intId);
-			$objPage = \PageModel::findWithDetails($objNews->getRelated('pid')->jumpTo);
-			$objLayout = \LayoutModel::findById($objPage->layout);	
-			return $objLayout->pid;
-		}
-		else
-		{
-			// HOOK: custom method to discover the theme
-			if (isset($GLOBALS['TL_HOOKS']['getThemeId']) && is_array($GLOBALS['TL_HOOKS']['getThemeId']))
-			{
-				foreach ($GLOBALS['TL_HOOKS']['getThemeId'] as $callback)
-				{
-					$this->import($callback[0]);
-					$intId = $this->{$callback[0]}->{$callback[1]}($strTable, $intId);
-				}
-			}
-			return $intId;
-		}
-	
-	}
 
 
 }
