@@ -42,7 +42,7 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['type']['default'] = false;
 
 
 
-
+	
 class tl_content_element extends tl_content
 {
 	
@@ -62,7 +62,8 @@ class tl_content_element extends tl_content
 	
 	
 	/**
-	 * Mark content element if content block is invisible
+	 * Wrap the content block elements into an div block and
+	 * mark content element if content block is invisible
 	 *
 	 * @param array $arrRow
 	 *
@@ -75,9 +76,10 @@ class tl_content_element extends tl_content
 		
 		$this->import('tl_content');
 		$return = $this->{'tl_content'}->{'addCteType'}($arrRow);
+
+		$return = ($objBlock->invisible) ? substr_replace($return, ' <span style="color: #b3b3b3;">(invisible content block)</div>', strpos($return, '</div>')) : $return;
 		
-		return ($objBlock->invisible) ? substr_replace($return, ' <span style="color: #b3b3b3;">(invisible content block)</div>', strpos($return, '</div>')) : $return;
-				
+		return '<div class="be">' . $return . '</div>';
 	}
 	
 	
@@ -88,7 +90,6 @@ class tl_content_element extends tl_content
 	 */
 	public function getContentElements ($dc)
 	{
-
 		// don´t try to add content block elements if nothing exists
 		if (\Config::get('overwriteCTE') && isset($GLOBALS['TL_CTB']))
 		{
@@ -146,7 +147,7 @@ class tl_content_element extends tl_content
 	{
 		// get content	
 		$objContent = \ContentModel::findByPk($dc->id);
-		
+	
 		if ($objContent === null)
 		{
 			return;
