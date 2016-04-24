@@ -4,6 +4,8 @@
 
 /* style for visual element selection */
 .chzn-container .chzn-results{max-height: 346px;}
+.chzn-container .chzn-results .result-selected{background: #f8f8f8; color: #444}
+
 
 /* standard contao template overwrite to show the backend the right way */
 #main h1.main_headline, #tl_navigation h1, #header h1 {font-size: 0.75rem;}
