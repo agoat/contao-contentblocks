@@ -149,10 +149,11 @@ class ContentBlocks extends \Controller
 		}
 	
 		// add to registry
-		$GLOBALS['TL_CTB'] = $arrCTB; // new content block elements
-		$GLOBALS['TL_CTB_IMG'] = $arrCBI; // new content block images
-
-		array_insert($GLOBALS['TL_CTE'], 0, $arrCTE); // add to standard content elements
+		$GLOBALS['TL_CTB'] = $arrCTB; // content block elements
+		$GLOBALS['TL_CTB_IMG'] = $arrCBI; // content block images
+		
+		$GLOBALS['TL_CTE_LEGACY'] = $GLOBALS['TL_CTE']; // save contao standard content elements for legacy support
+		array_insert($GLOBALS['TL_CTE'], 0, $arrCTE); // add to content elements array
 		
 		array_insert($GLOBALS['TL_LANG']['CTE'], 0, $arrLANG); // add to language 
 
@@ -173,15 +174,51 @@ class ContentBlocks extends \Controller
 		if ($strTable == 'tl_article')
 		{
 			$objArticle = \ArticleModel::findById($intId);
+
+			if ($objArticle === null)
+			{
+				return false;
+			}
+			
 			$objPage = \PageModel::findWithDetails($objArticle->pid);
+
+			if ($objPage === null)
+			{
+				return false;
+			}
+
 			$objLayout = \LayoutModel::findById($objPage->layout);	
+
+			if ($objLayout === null)
+			{
+				return false;
+			}
+
 			return $objLayout->pid;
 		}
 		elseif($strTable == 'tl_news')
 		{
 			$objNews = \NewsModel::findById($intId);
+
+			if ($objNews === null)
+			{
+				return false;
+			}
+			
 			$objPage = \PageModel::findWithDetails($objNews->getRelated('pid')->jumpTo);
+
+			if ($objPage === null)
+			{
+				return false;
+			}
+
 			$objLayout = \LayoutModel::findById($objPage->layout);	
+
+			if ($objLayout === null)
+			{
+				return false;
+			}
+
 			return $objLayout->pid;
 		}
 		else

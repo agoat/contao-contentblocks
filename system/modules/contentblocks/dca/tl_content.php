@@ -66,8 +66,8 @@ class tl_content_element extends tl_content
 	 * mark content element if content block is invisible
 	 *
 	 * @param array $arrRow
-	 *
 	 * @return string
+	 *
 	 */
 	public function addCteType($arrRow)
 	{	
@@ -88,18 +88,29 @@ class tl_content_element extends tl_content
 	 */
 	public function getContentElements ($dc)
 	{
+		// try to get the theme id
+		$intThemeID = \ContentBlocks::getThemeId($dc->activeRecord->ptable,  $dc->activeRecord->pid);
+	
+
 		// don´t try to add content block elements if nothing exists
-		if (\Config::get('overwriteCTE') && isset($GLOBALS['TL_CTB']))
+		if (is_array($GLOBALS['TL_CTB']) && $intThemeID)
 		{
-			$arrCTE = $GLOBALS['TL_CTB'][\ContentBlocks::getThemeId($dc->activeRecord->ptable, $dc->activeRecord->pid)];
+			$arrCTB = $GLOBALS['TL_CTB'][$intThemeID];
 		}
 		else
 		{
-			$arrCTE = $GLOBALS['TL_CTE'];
-
-			unset($arrCTE['ctb']);
-			array_insert($arrCTE, 0, $GLOBALS['TL_CTB'][\ContentBlocks::getThemeId($dc->activeRecord->ptable, $dc->activeRecord->pid)]);
+			$arrCTB = array(); // of no content block exist or no theme id determined return an empty array
 		}
+
+		if (\Config::get('overwriteCTE'))
+		{
+			$arrCTE = $arrCTB;
+		}
+		else
+		{
+			$arrCTE = array_merge($arrCTB, $GLOBALS['TL_CTE_LEGACY']);
+		}
+
 		
 		// legacy support
 		if ($dc->value != '' && !in_array($dc->value, array_keys(array_reduce($arrCTE, 'array_merge', array()))))
@@ -127,13 +138,21 @@ class tl_content_element extends tl_content
 		if (!$value)
 		{
 			$objContent = \ContentModel::findByPk($dc->id);
-				
-			$objContent->type = (isset($GLOBALS['TL_CTB'])) ? $GLOBALS['TL_CTB_DEFAULT'][\ContentBlocks::getThemeId($dc->activeRecord->ptable,  $dc->activeRecord->pid)] : "text";
+			$intThemeID = \ContentBlocks::getThemeId($dc->activeRecord->ptable,  $dc->activeRecord->pid);
+	
+
+
+		if (!$intThemeID) 
+			{
+				return (isset($GLOBALS['TL_CTB'])) ? '' : 'text';
+			}
+			
+			$objContent->type = (isset($GLOBALS['TL_CTB'])) ? $GLOBALS['TL_CTB_DEFAULT'][$intThemeID] : 'text';
 			$objContent->save();
 				
 			$this->redirect(\Environment::get('request'));
 		}
-		
+	
 		return $value;
 	}
 
