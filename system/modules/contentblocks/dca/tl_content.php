@@ -348,7 +348,7 @@ class tl_content_element extends tl_content
 	{
 		$colValues = \ContentValueModel::findByCid($dc->activeRecord->id);
 		
-		if ($colValues == null)
+		if ($colValues === null)
 		{
 			return;
 		}
@@ -385,7 +385,7 @@ class tl_content_element extends tl_content
 	{
 		$colValues = \ContentValueModel::findByCid($dc->id);
 
-		if ($colValues == null)
+		if ($colValues === null)
 		{
 			return;
 		}
@@ -406,7 +406,7 @@ class tl_content_element extends tl_content
 		
 		$colValues = \ContentValueModel::findByCid($dc->id);
 
-		if ($colValues == null)
+		if ($colValues === null)
 		{
 			return;
 		}
@@ -422,12 +422,17 @@ class tl_content_element extends tl_content
 	}
 
 	/**
-	 * save new version with the content element for each pattern value
+	 * restore values for each pattern value with the content element 
 	 */
 	public function restoreRelatedValues ($intPid, $strTable, $dc, $intVersion)
 	{
 
 		$colValues = \ContentValueModel::findByCid($intPid);
+		
+		if ($colValues === null)
+		{
+			return $intVersion;
+		}
 
 		foreach ($colValues as $objValue)
 		{
