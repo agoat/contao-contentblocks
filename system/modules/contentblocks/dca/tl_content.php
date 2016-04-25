@@ -20,8 +20,8 @@ $GLOBALS['TL_DCA']['tl_content']['config']['onsubmit_callback'][] = array('tl_co
 $GLOBALS['TL_DCA']['tl_content']['config']['ondelete_callback'][] = array('tl_content_element', 'deleteRelatedValues');
 $GLOBALS['TL_DCA']['tl_content']['config']['oncopy_callback'][] = array('tl_content_element', 'copyRelatedValues');
 
-$GLOBALS['TL_DCA']['tl_content']['config']['onversion_callback'][] = array('tl_content_element', 'newRelatedValuesVersion');
-$GLOBALS['TL_DCA']['tl_content']['config']['onrestore_callback'][] = array('tl_content_element', 'restoreRelatedValues');
+$GLOBALS['TL_DCA']['tl_content']['config']['oncreate_version_callback'][] = array('tl_content_element', 'createRelatedValuesVersion');
+$GLOBALS['TL_DCA']['tl_content']['config']['onrestore_version_callback'][] = array('tl_content_element', 'restoreRelatedValuesVersion');
 
 $GLOBALS['TL_DCA']['tl_content']['list']['sorting']['child_record_callback'] = array('tl_content_element', 'addCteType');
 
@@ -295,7 +295,7 @@ class tl_content_element extends tl_content
 
 	
 	/**
-	 * save fields value to tl_content_value table
+	 * save field values to tl_content_value table
 	 */
 	public function savePatternFields (&$dc)
 	{
@@ -304,7 +304,7 @@ class tl_content_element extends tl_content
 		{
 			foreach ($pattern as $pid => $fields)
 			{
-				$bolSave = false;
+				$bolVersion = false;
 				$objValue = \ContentValueModel::findByCidandPidandRid($dc->activeRecord->id,$pid,$rid);
 				if ($objValue === null)
 				{
@@ -323,15 +323,15 @@ class tl_content_element extends tl_content
 					if ($objValue->$k != $v)
 					{
 
-						$bolSave = true;
+						$bolVersion = true;
 						$objValue->$k = $v;
 					}
 				}
 		
-		
-				if ($bolSave)
+				$objValue->save();
+				
+				if ($bolVersion)
 				{
-					$objValue->save();
 					$dc->blnCreateNewVersion = true;
 				}
 				
@@ -401,22 +401,26 @@ class tl_content_element extends tl_content
 	/**
 	 * save new version with the content element for each pattern value
 	 */
-	public function newRelatedValuesVersion ($strTable, $intVersionId, $dc)
+	public function createRelatedValuesVersion ($strTable, $intPid, $intVersion, $row)
 	{
-		
-		$colValues = \ContentValueModel::findByCid($dc->id);
+		// get tl_content_values collection
+		$colValues = \ContentValueModel::findByCid($intPid);
 
 		if ($colValues === null)
 		{
 			return;
 		}
 		
+		$this->import('BackendUser', 'User');
+		
 		foreach ($colValues as $objValue)
 		{
-			// versioning all values
-			$objVersion = new \Versions('tl_content_value', $objValue->id);
-			$objVersion->initialize();
-			$objVersion->create();
+			$this->Database->prepare("UPDATE tl_version SET active='' WHERE pid=? AND fromTable=?")
+					   ->execute($objValue->id, 'tl_content_value');
+					   
+			$this->Database->prepare("INSERT INTO tl_version (pid, tstamp, version, fromTable, username, userid, description, editUrl, active, data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)")
+					   ->execute($objValue->id, time(), $intVersion, 'tl_content_value', $this->User->username, $this->User->id, '', '', serialize($objValue->row()));
+
 		} 			
 		
 	}
@@ -424,57 +428,63 @@ class tl_content_element extends tl_content
 	/**
 	 * restore values for each pattern value with the content element 
 	 */
-	public function restoreRelatedValues ($intPid, $strTable, $dc, $intVersion)
+	public function restoreRelatedValuesVersion ($strTable, $intPid, $intVersion, $data)
 	{
-
+		// get tl_content_values collection
 		$colValues = \ContentValueModel::findByCid($intPid);
-		
+	
 		if ($colValues === null)
 		{
-			return $intVersion;
+			return; 
 		}
 
 		foreach ($colValues as $objValue)
 		{
-			// restoring all values (don´t use the version class because the callback is inside the restore method)
+
+			// get values version (don´t use the version class because the callback is inside the restore method)
 			$objData = $this->Database->prepare("SELECT * FROM tl_version WHERE fromTable=? AND pid=? AND version=?")
 									  ->limit(1)
 									  ->execute('tl_content_value', $objValue->id, $intVersion);
-			
-			if ($objData->numRows)
+	
+			if ($objData->numRows < 1)
 			{
-			
-				$data = deserialize($objData->data);
-			
-				if (is_array($data))
-				{	
-					// Get the currently available fields
-					$arrFields = array_flip($this->Database->getFieldnames('tl_content_value'));
-					
-					// Unset fields that do not exist (see #5219)
-					$data = array_intersect_key($data, $arrFields);
-					
-					$this->loadDataContainer('tl_content_value');
-					
-					// Reset fields added after storing the version to their default value (see #7755)
-					foreach (array_diff_key($arrFields, $data) as $k=>$v)
-					{
-						$data[$k] = \Widget::getEmptyValueByFieldType($GLOBALS['TL_DCA'][$this->strTable]['fields'][$k]['sql']);
-					}
-					
-					$this->Database->prepare("UPDATE tl_content_value %s WHERE id=?")
-				   				   ->set($data)
-								   ->execute($objValue->id);
-				
-					$this->Database->prepare("UPDATE tl_version SET active='' WHERE pid=?")
-								   ->execute($objValue->id);
-					
-					$this->Database->prepare("UPDATE tl_version SET active=1 WHERE pid=? AND version=?")
-								   ->execute($objValue->id, $intVersion);
-								   
-
-				}
+				break;
 			}
+			
+			$data = deserialize($objData->data);
+			
+			if (!is_array($data))
+			{
+				break;
+			}
+	
+				
+			// Get the currently available fields
+			$arrFields = array_flip($this->Database->getFieldnames('tl_content_value'));
+			
+			// Unset fields that do not exist (see #5219)
+			$data = array_intersect_key($data, $arrFields);
+				
+			$this->loadDataContainer('tl_content_value');
+	
+			// Reset fields added after storing the version to their default value (see #7755)
+			foreach (array_diff_key($arrFields, $data) as $k=>$v)
+			{
+				$data[$k] = \Widget::getEmptyValueByFieldType($GLOBALS['TL_DCA']['tl_content_value']['fields'][$k]['sql']);
+			}
+		
+			
+			$this->Database->prepare("UPDATE tl_content_value %s WHERE id=?")
+							->set($data)
+							->execute($objValue->id);
+			
+			$this->Database->prepare("UPDATE tl_version SET active='' WHERE fromTable=? AND pid=?")
+							->execute('tl_content_value', $objValue->id);
+			
+			$this->Database->prepare("UPDATE tl_version SET active=1 WHERE fromTable=? AND pid=? AND version=?")
+							->execute('tl_content_value', $objValue->id, $intVersion);
+			
+			
 		}
 		
 	}
