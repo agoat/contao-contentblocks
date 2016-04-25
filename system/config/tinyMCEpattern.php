@@ -23,7 +23,8 @@ if ($this instanceof Contao\PatternTextArea)
 }
 else
 {
-	$objTheme = \ThemeModel::findOneById(\ContentBlocks::getThemeId($this->activeRecord->ptable, $this->activeRecord->pid));
+	$objLayout = \LayoutModel::findOneById(\ContentBlocks::getLayoutId($this->activeRecord->ptable, $this->activeRecord->pid));
+	$objTheme = \ThemeModel::findOneById($objLayout->pid);
 }
 
 

@@ -36,6 +36,25 @@ class ContentBlocks extends \Controller
 					$GLOBALS['TL_USER_CSS'] = array();
 				}
 
+				// add backend css from layout
+				if (\Input::get('do') && \Input::get('id'))
+				{
+					$intLayoutId = $this->getLayoutId('tl_'.\Input::get('do'), \Input::get('id'));
+					$objLayout = \LayoutModel::findById($intLayoutId);
+					
+					if ($objLayout !== null)
+					{
+						$objFile = \FilesModel::findByPk($objLayout->backendCSS);
+		
+						if ($objFile !== null)
+						{
+							$GLOBALS['TL_USER_CSS'][] = $objFile->path . '|static';
+						}
+
+					}
+				}
+				
+				// add extra content block css
 				if (is_array($GLOBALS['TL_CB_CSS']))
 				{
 					$GLOBALS['TL_USER_CSS'] = array_merge($GLOBALS['TL_USER_CSS'], $GLOBALS['TL_CB_CSS']);
@@ -169,7 +188,7 @@ class ContentBlocks extends \Controller
 	 *
 	 * @return integer The theme ID
 	 */
-	public static function getThemeId ($strTable, $intId)
+	public static function getLayoutId ($strTable, $intId)
 	{
 		if ($strTable == 'tl_article')
 		{
@@ -187,14 +206,8 @@ class ContentBlocks extends \Controller
 				return false;
 			}
 
-			$objLayout = \LayoutModel::findById($objPage->layout);	
-
-			if ($objLayout === null)
-			{
-				return false;
-			}
-
-			return $objLayout->pid;
+			return $objPage->layout;
+			
 		}
 		elseif($strTable == 'tl_news')
 		{
@@ -211,22 +224,16 @@ class ContentBlocks extends \Controller
 			{
 				return false;
 			}
-
-			$objLayout = \LayoutModel::findById($objPage->layout);	
-
-			if ($objLayout === null)
-			{
-				return false;
-			}
-
-			return $objLayout->pid;
+			
+			return $objPage->layout;
+			
 		}
 		else
 		{
 			// HOOK: custom method to discover the theme
-			if (isset($GLOBALS['TL_HOOKS']['getThemeId']) && is_array($GLOBALS['TL_HOOKS']['getThemeId']))
+			if (isset($GLOBALS['TL_HOOKS']['getLayoutId']) && is_array($GLOBALS['TL_HOOKS']['getLayoutId']))
 			{
-				foreach ($GLOBALS['TL_HOOKS']['getThemeId'] as $callback)
+				foreach ($GLOBALS['TL_HOOKS']['getLayoutId'] as $callback)
 				{
 					$this->import($callback[0]);
 					$intId = $this->{$callback[0]}->{$callback[1]}($strTable, $intId);

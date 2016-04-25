@@ -89,19 +89,21 @@ class tl_content_element extends tl_content
 	public function getContentElements ($dc)
 	{
 		// try to get the theme id
-		$intThemeID = \ContentBlocks::getThemeId($dc->activeRecord->ptable,  $dc->activeRecord->pid);
-	
+		$intLayoutId = \ContentBlocks::getLayoutId($dc->activeRecord->ptable,  $dc->activeRecord->pid);
+		
+		$objLayout = \LayoutModel::findById($intLayoutId);	
 
 		// don´t try to add content block elements if nothing exists
-		if (is_array($GLOBALS['TL_CTB']) && $intThemeID)
+		if (is_array($GLOBALS['TL_CTB']) && $objLayout)
 		{
-			$arrCTB = $GLOBALS['TL_CTB'][$intThemeID];
+			$arrCTB = $GLOBALS['TL_CTB'][$objLayout->pid];
 		}
 		else
 		{
 			$arrCTB = array(); // of no content block exist or no theme id determined return an empty array
 		}
 
+		// hide the contao content elements
 		if (\Config::get('overwriteCTE'))
 		{
 			$arrCTE = $arrCTB;
@@ -138,16 +140,16 @@ class tl_content_element extends tl_content
 		if (!$value)
 		{
 			$objContent = \ContentModel::findByPk($dc->id);
-			$intThemeID = \ContentBlocks::getThemeId($dc->activeRecord->ptable,  $dc->activeRecord->pid);
+			$intLayoutId = \ContentBlocks::getLayoutId($dc->activeRecord->ptable,  $dc->activeRecord->pid);
 	
+			$objLayout = \LayoutModel::findById($intLayoutId);
 
-
-		if (!$intThemeID) 
+			if ($objLayout === null) 
 			{
-				return (isset($GLOBALS['TL_CTB'])) ? '' : 'text';
+				return (is_array($GLOBALS['TL_CTB'])) ? '' : 'text';
 			}
 			
-			$objContent->type = (isset($GLOBALS['TL_CTB'])) ? $GLOBALS['TL_CTB_DEFAULT'][$intThemeID] : 'text';
+			$objContent->type = (is_array($GLOBALS['TL_CTB'])) ? $GLOBALS['TL_CTB_DEFAULT'][$objLayout->pid] : 'text';
 			$objContent->save();
 				
 			$this->redirect(\Environment::get('request'));
