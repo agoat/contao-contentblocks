@@ -17,8 +17,8 @@
 $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_content_element', 'buildPaletteAndFields');
 $GLOBALS['TL_DCA']['tl_content']['config']['onsubmit_callback'][] = array('tl_content_element', 'savePatternFields');
 
-$GLOBALS['TL_DCA']['tl_content']['config']['oncopy_callback'][] = array('tl_content_element', 'copyRelatedValues');
 $GLOBALS['TL_DCA']['tl_content']['config']['ondelete_callback'][] = array('tl_content_element', 'deleteRelatedValues');
+$GLOBALS['TL_DCA']['tl_content']['config']['oncopy_callback'][] = array('tl_content_element', 'copyRelatedValues');
 
 $GLOBALS['TL_DCA']['tl_content']['config']['oncreate_version_callback'][] = array('tl_content_element', 'createRelatedValuesVersion');
 $GLOBALS['TL_DCA']['tl_content']['config']['onrestore_version_callback'][] = array('tl_content_element', 'restoreRelatedValuesVersion');
@@ -352,6 +352,8 @@ class tl_content_element extends tl_content
 			return;
 		}
 
+		$this->import('BackendUser', 'User');
+			
 		// get the undo database row
 		$objUndo = $this->Database->prepare("SELECT data FROM tl_undo WHERE id=?")
 								  ->execute($intUndoId) ;
@@ -367,7 +369,7 @@ class tl_content_element extends tl_content
 
 			$objValue->delete();
 		}
-	
+		
 		// save to the undo database row
 		$this->Database->prepare("UPDATE tl_undo SET data=? WHERE id=?")
 					   ->execute(serialize($arrData), $intUndoId);
