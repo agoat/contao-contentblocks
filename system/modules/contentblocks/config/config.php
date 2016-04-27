@@ -13,7 +13,7 @@
 
 
  /**
- * Register back end modules tables
+ * Register back end module tables
  */
 array_push($GLOBALS['BE_MOD']['design']['themes']['tables'], 'tl_content_blocks', 'tl_content_pattern', 'tl_content_value');
 
@@ -24,6 +24,8 @@ array_push($GLOBALS['BE_MOD']['design']['themes']['tables'], 'tl_content_blocks'
  */
 $GLOBALS['TL_HOOKS']['getPageLayout'][] = array('ContentBlocks','loadAndRegisterBlockElements');
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('ContentBlocks','loadAndRegisterElementsWithGroups');
+
+$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('ContentBlocks','setNewsArticleCallbacks');
 
 $GLOBALS['TL_HOOKS']['parseTemplate'][] = array('ContentBlocks','addPageLayoutToBE');
 

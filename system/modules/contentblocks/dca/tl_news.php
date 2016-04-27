@@ -13,23 +13,19 @@
 
 
 
-// table callbacks
-$GLOBALS['TL_DCA']['tl_article']['config']['oncopy_callback'][] = array('tl_article_contentblocks', 'copyRelatedValues');
-$GLOBALS['TL_DCA']['tl_article']['config']['ondelete_callback'][] = array('tl_article_contentblocks', 'deleteRelatedValues');
+	
+class tl_news_contentblocks extends Backend
+{
 
 	
-class tl_article_contentblocks extends tl_article
-{
-	
-		
 	/**
 	 * copy related Values from the content elements when an article is copied
 	 */
 	public function copyRelatedValues ($intId, $dc)
 	{
 		
-		$colOrigContent = \ContentModel::findByPid($dc->id, array('order'=>'sorting'));
-		$colNewContent = \ContentModel::findByPid($intId, array('order'=>'sorting'));
+		$colOrigContent = \ContentModel::findByPid($dc->id, array('order'=>'sorting ASC'));
+		$colNewContent = \ContentModel::findByPid($intId, array('order'=>'sorting ASC'));
 
 		while ($colOrigContent->next())
 		{

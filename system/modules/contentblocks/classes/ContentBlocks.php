@@ -249,5 +249,23 @@ class ContentBlocks extends \Controller
 	}
 
 	
+	
+	/**
+	 * register callbacks
+	 */
+	public function setNewsArticleCallbacks ($strTable)
+	{
+		if ($strTable != 'tl_news' || TL_MODE == 'FE')
+		{
+			return;
+		}
+	
+		$GLOBALS['TL_DCA']['tl_news']['config']['oncopy_callback'][] = array('tl_news_contentblocks', 'copyRelatedValues');
+		$GLOBALS['TL_DCA']['tl_news']['config']['ondelete_callback'][] = array('tl_news_contentblocks', 'deleteRelatedValues');
+
+	}
+	
+
+	
 }
 
