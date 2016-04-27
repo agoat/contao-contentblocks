@@ -37,6 +37,7 @@ class ContentBlocks extends \Controller
 
 				if (\Input::get('do') && \Input::get('id'))
 				{
+					$intLayoutId = $this->getLayoutId('tl_'.\Input::get('do'), (\Input::get('mode') == 'copy') ? \ContentModel::findById(\Input::get('id'))->pid : \Input::get('id')); // in copy mode the id is not the article but the content
 				}
 
 				$objLayout = \LayoutModel::findById($intLayoutId);
