@@ -26,8 +26,7 @@ class ContentBlocks extends \Controller
 		// add the contentblocks backend stylesheets
 		if (TL_MODE == 'BE')
 		{
-	
-			if ($objTemplate->getName() == 'be_main' && Input::get('table') == 'tl_content' && !\Input::get('act'))
+			if ($objTemplate->getName() == 'be_main' && Input::get('table') == 'tl_content')
 			{
 				
 				// Make sure TL_USER_CSS is set
@@ -36,21 +35,19 @@ class ContentBlocks extends \Controller
 					$GLOBALS['TL_USER_CSS'] = array();
 				}
 
-				// add backend css from layout
 				if (\Input::get('do') && \Input::get('id'))
 				{
-					$intLayoutId = $this->getLayoutId('tl_'.\Input::get('do'), \Input::get('id'));
-					$objLayout = \LayoutModel::findById($intLayoutId);
-					
-					if ($objLayout !== null)
-					{
-						$objFile = \FilesModel::findByPk($objLayout->backendCSS);
-		
-						if ($objFile !== null)
-						{
-							$GLOBALS['TL_USER_CSS'][] = $objFile->path . '|static';
-						}
+				}
 
+				$objLayout = \LayoutModel::findById($intLayoutId);
+
+				if ($objLayout !== null)
+				{
+					$objFile = \FilesModel::findByPk($objLayout->backendCSS);
+	
+					if ($objFile !== null)
+					{
+						$GLOBALS['TL_USER_CSS'][] = $objFile->path . '|static';
 					}
 				}
 				
