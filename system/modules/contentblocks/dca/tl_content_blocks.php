@@ -151,8 +151,8 @@ $GLOBALS['TL_DCA']['tl_content_blocks'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50', 'unique'=>true),
-			'sql'                     => "varchar(255) NOT NULL default ''"
+			'eval'                    => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50', 'unique'=>true),
+			'sql'                     => "varchar(128) NOT NULL default ''"
 		),
 		'alias' => array
 		(

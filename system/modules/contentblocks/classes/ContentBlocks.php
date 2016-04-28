@@ -248,10 +248,11 @@ class ContentBlocks extends \Controller
 	
 	}
 
-	
+
+
 	
 	/**
-	 * register callbacks
+	 * register callbacks for news extension bundles with contao core
 	 */
 	public function setNewsArticleCallbacks ($strTable)
 	{
@@ -259,7 +260,7 @@ class ContentBlocks extends \Controller
 		{
 			return;
 		}
-	
+		
 		$GLOBALS['TL_DCA']['tl_news']['config']['oncopy_callback'][] = array('tl_news_contentblocks', 'copyRelatedValues');
 		$GLOBALS['TL_DCA']['tl_news']['config']['ondelete_callback'][] = array('tl_news_contentblocks', 'deleteRelatedValues');
 
