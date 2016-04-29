@@ -586,7 +586,7 @@ class Theme extends \Backend
 							}
 							else
 							{
-								// Do not use the FilesModel here – tables are locked!
+								// Do not use the FilesModel here ? tables are locked!
 								$objFile = $this->Database->prepare("SELECT uuid FROM tl_files WHERE path=?")
 														  ->limit(1)
 														  ->execute($this->customizeUploadPath($value));
@@ -604,7 +604,7 @@ class Theme extends \Backend
 							{
 								foreach ($tmp as $kk=>$vv)
 								{
-									// Do not use the FilesModel here – tables are locked!
+									// Do not use the FilesModel here ? tables are locked!
 									$objFile = $this->Database->prepare("SELECT uuid FROM tl_files WHERE path=?")
 															  ->limit(1)
 															  ->execute($this->customizeUploadPath($vv));
@@ -727,11 +727,11 @@ class Theme extends \Backend
 
 		// Add the tables
 		$this->addTableTlTheme($xml, $tables, $objTheme);
+		$this->addTableTlImageSize($xml, $tables, $objTheme);
 		$this->addTableTlContentBlocks($xml, $tables, $objTheme);
 		$this->addTableTlStyleSheet($xml, $tables, $objTheme);
 		$this->addTableTlModule($xml, $tables, $objTheme);
 		$this->addTableTlLayout($xml, $tables, $objTheme);
-		$this->addTableTlImageSize($xml, $tables, $objTheme);
 
 		// Generate the archive
 		$strTmp = md5(uniqid(mt_rand(), true));
@@ -758,7 +758,7 @@ class Theme extends \Backend
 		// Close the archive
 		$objArchive->close();
 
-		// Open the "save as …" dialogue
+		// Open the "save as ?" dialogue
 		$objFile = new \File('system/tmp/'. $strTmp, true);
 		$objFile->sendToBrowser($strName . '.cto');
 	}
