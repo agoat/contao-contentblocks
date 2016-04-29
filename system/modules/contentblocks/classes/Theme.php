@@ -632,6 +632,23 @@ class Theme extends \Backend
 							$value = serialize($imageSizes);
 						}
 
+						// Adjust the sizeList
+						elseif ($table == 'tl_content_pattern' && $name == 'sizeList')
+						{
+							$imageSizes = deserialize($value, true);
+
+							if (!empty($imageSizes))
+							{
+								foreach ($imageSizes as $kk=>$vv)
+								{
+									$imageSizes[$kk] = $arrMapper['tl_image_size'][$vv];
+									if (empty($imageSizes[$kk])) unset($imageSizes[$kk]); // remove if no new size could be found
+								}
+							}
+							
+							$value = serialize($imageSizes);
+						}
+
 						$set[$name] = $value;
 					}
 
