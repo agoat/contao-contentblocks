@@ -90,14 +90,14 @@ class Theme extends \Backend
 			(
 				'tl_files'           => $this->Database->getFieldNames('tl_files'),
 				'tl_theme'           => $this->Database->getFieldNames('tl_theme'),
+				'tl_content_blocks'  => $this->Database->getFieldNames('tl_content_blocks'),
+				'tl_content_pattern' => $this->Database->getFieldNames('tl_content_pattern'),
 				'tl_style_sheet'     => $this->Database->getFieldNames('tl_style_sheet'),
 				'tl_style'           => $this->Database->getFieldNames('tl_style'),
 				'tl_module'          => $this->Database->getFieldNames('tl_module'),
 				'tl_layout'          => $this->Database->getFieldNames('tl_layout'),
 				'tl_image_size'      => $this->Database->getFieldNames('tl_image_size'),
-				'tl_image_size_item' => $this->Database->getFieldNames('tl_image_size_item'),
-				'tl_content_blocks'  => $this->Database->getFieldNames('tl_content_blocks'),
-				'tl_content_pattern' => $this->Database->getFieldNames('tl_content_pattern')
+				'tl_image_size_item' => $this->Database->getFieldNames('tl_image_size_item')
 			);
 
 			// Proceed
@@ -391,14 +391,14 @@ class Theme extends \Backend
 			(
 				'tl_files'           => 'WRITE',
 				'tl_theme'           => 'WRITE',
+				'tl_content_blocks'  => 'WRITE',
+				'tl_content_pattern' => 'WRITE',
 				'tl_style_sheet'     => 'WRITE',
 				'tl_style'           => 'WRITE',
 				'tl_module'          => 'WRITE',
 				'tl_layout'          => 'WRITE',
 				'tl_image_size'      => 'WRITE',
-				'tl_image_size_item' => 'WRITE',
-				'tl_content_blocks'  => 'WRITE',
-				'tl_content_pattern' => 'WRITE'
+				'tl_image_size_item' => 'WRITE'
 			);
 
 			// Load the DCAs of the locked tables (see #7345)
@@ -412,14 +412,44 @@ class Theme extends \Backend
 			// Get the current auto_increment values
 			$tl_files = $this->Database->getNextId('tl_files');
 			$tl_theme = $this->Database->getNextId('tl_theme');
+			$tl_content_blocks = $this->Database->getNextId('tl_content_blocks');
+			$tl_content_pattern = $this->Database->getNextId('tl_content_pattern');
 			$tl_style_sheet = $this->Database->getNextId('tl_style_sheet');
 			$tl_style = $this->Database->getNextId('tl_style');
 			$tl_module = $this->Database->getNextId('tl_module');
 			$tl_layout = $this->Database->getNextId('tl_layout');
 			$tl_image_size = $this->Database->getNextId('tl_image_size');
 			$tl_image_size_item = $this->Database->getNextId('tl_image_size_item');
-			$tl_content_blocks = $this->Database->getNextId('tl_content_blocks');
-			$tl_content_pattern = $this->Database->getNextId('tl_content_pattern');
+
+			// Build mapper data
+			for ($i=0; $i<$tables->length; $i++)
+			{
+				$rows = $tables->item($i)->childNodes;
+				$table = $tables->item($i)->getAttribute('name');
+
+				// Skip invalid tables
+				if (!in_array($table, array_keys($arrLocks)))
+				{
+					continue;
+				}
+
+				// Loop through the rows
+				for ($j=0; $j<$rows->length; $j++)
+				{
+					$fields = $rows->item($j)->childNodes;
+
+					// Loop through the fields
+					for ($k=0; $k<$fields->length; $k++)
+					{
+						// Increment the ID
+						if ($fields->item($k)->getAttribute('name') == 'id')
+						{
+							$arrMapper[$table][$fields->item($k)->nodeValue] = ${$table}++;
+							break;
+						}
+					}
+				}
+			}
 
 			// Loop through the tables
 			for ($i=0; $i<$tables->length; $i++)
@@ -458,9 +488,7 @@ class Theme extends \Backend
 						// Increment the ID
 						elseif ($name == 'id')
 						{
-							$id = ${$table}++;
-							$arrMapper[$table][$value] = $id;
-							$value = $id;
+							$value = $arrMapper[$table][$value];
 						}
 
 						// Increment the parent IDs
@@ -700,7 +728,7 @@ class Theme extends \Backend
 				}
 			}
 
-			unset($tl_files, $tl_theme, $tl_style_sheet, $tl_style, $tl_module, $tl_layout, $tl_image_size, $tl_image_size_item);
+			unset($tl_files, $tl_theme, $tl_style_sheet, $tl_style, $tl_module, $tl_layout, $tl_image_size, $tl_image_size_item, $tl_content_blocks, $tl_content_pattern);
 		}
 
 		\System::setCookie('BE_PAGE_OFFSET', 0, 0);
@@ -744,11 +772,11 @@ class Theme extends \Backend
 
 		// Add the tables
 		$this->addTableTlTheme($xml, $tables, $objTheme);
-		$this->addTableTlImageSize($xml, $tables, $objTheme);
 		$this->addTableTlContentBlocks($xml, $tables, $objTheme);
 		$this->addTableTlStyleSheet($xml, $tables, $objTheme);
 		$this->addTableTlModule($xml, $tables, $objTheme);
 		$this->addTableTlLayout($xml, $tables, $objTheme);
+		$this->addTableTlImageSize($xml, $tables, $objTheme);
 
 		// Generate the archive
 		$strTmp = md5(uniqid(mt_rand(), true));
@@ -814,7 +842,7 @@ class Theme extends \Backend
 	 * @param \ZipWriter    $objArchive
 	 * @param Integer       $intThemeId
 	 */
-	public function addTableTlContentBlocks(\DOMDocument $xml, \DOMNode $tables, \Database\Result $objTheme)
+	protected function addTableTlContentBlocks(\DOMDocument $xml, \DOMNode $tables, \Database\Result $objTheme)
 	{
 		// Add the table (elements)
 		$table = $xml->createElement('table');
