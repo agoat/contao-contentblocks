@@ -135,7 +135,7 @@ class PatternFileTree extends \Pattern
 				),
 				'load_callback'	=>	array
 				(
-					array('tl_content_change','defaultValue')
+					array('tl_content_element','defaultValue')
 				),
 			));	
 		}
