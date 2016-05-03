@@ -26,6 +26,11 @@ $GLOBALS['TL_DCA']['tl_content_blocks'] = array
 		'enableVersioning'            => true,
 		'ptable'                      => 'tl_theme',
 		'ctable'                      => array('tl_content_pattern'),
+		'onload_callback' => array
+		(
+			//array('tl_content_blocks', 'checkPermission'),
+			array('tl_content_blocks', 'showAlreadyUsedHint')
+		),
 		'onsubmit_callback'			  => array
 		(
 			array('tl_content_blocks', 'generateAlias')
@@ -220,7 +225,7 @@ $GLOBALS['TL_DCA']['tl_content_blocks'] = array
 /**
  * Provide miscellaneous methods that are used by the data configuration array.
  *
- * @author Leo Feyer <https://github.com/leofeyer>
+ * @author Arne Stappen (aGoat) <https://github.com/agoat>
  */
 class tl_content_blocks extends Backend
 {
@@ -311,6 +316,33 @@ class tl_content_blocks extends Backend
 		ksort($arrTemplates);
 
 		return $arrTemplates;
+	}
+
+
+	/**
+	 * Show a hint if the content block is already in use
+	 */
+	public function showAlreadyUsedHint(DataContainer $dc)
+	{
+		if ($_POST || Input::get('act') != 'edit')
+		{
+			return;
+		}
+
+		// Return if the user cannot access the layout module (see #6190)
+		if (!$this->User->hasAccess('themes', 'modules') || !$this->User->hasAccess('layout', 'themes'))
+		{
+			return;
+		}
+
+		// Check if the content block is in use
+		$objContentBlock = \ContentBlocksModel::findById($dc->id);
+		
+		if (\ContentModel::countBy('type', $objContentBlock->alias) > 0)
+		{
+			Message::addInfo('Be aware on changes. The content block element is already in use!!');
+		}
+
 	}
 
 

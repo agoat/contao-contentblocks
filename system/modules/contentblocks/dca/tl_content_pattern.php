@@ -22,8 +22,14 @@ $GLOBALS['TL_DCA']['tl_content_pattern'] = array
 	'config' => array
 	(
 		'dataContainer'               => 'Table',
+		'switchToEdit'                => true,
 		'enableVersioning'            => true,
 		'ptable'                      => 'tl_content_blocks',
+		'onload_callback' => array
+		(
+			//array('tl_content_pattern', 'checkPermission'),
+			array('tl_content_pattern', 'showAlreadyUsedHint')
+		),
 		'onsubmit_callback'			  => array
 		(
 			array('tl_content_pattern', 'correctGroups'),
@@ -586,7 +592,7 @@ $GLOBALS['TL_DCA']['tl_content_pattern'] = array
 /**
  * Provide miscellaneous methods that are used by the data configuration array.
  *
- * @author Leo Feyer <https://github.com/leofeyer>
+ * @author Arne Stappen (aGoat) <https://github.com/agoat>
  */
 class tl_content_pattern extends Backend
 {
@@ -620,7 +626,7 @@ class tl_content_pattern extends Backend
 			case 'section':
 				if ($arrRow['replicable'])
 				{
-					$options = '<span style="color :#b3b3b3 ;padding-left: 3px">(Template alias: $this->' . $arrRow['alias'] . '->...)</span>';		
+					$options = ' <span style="color :#b3b3b3 ;padding-left: 3px">(Template alias: $this->' . $arrRow['alias'] . '->...)</span>';		
 					$type = $GLOBALS['TL_LANG']['CTP']['multisection'][0];
 				}
 				break;
@@ -872,7 +878,35 @@ class tl_content_pattern extends Backend
 		}
 	}
 
+	
+	/**
+	 * Show a hint if the content block is already in use
+	 */
+	public function showAlreadyUsedHint(DataContainer $dc)
+	{
+		if ($_POST || Input::get('act') != 'edit')
+		{
+			return;
+		}
 
+		// Return if the user cannot access the layout module (see #6190)
+		if (!$this->User->hasAccess('themes', 'modules') || !$this->User->hasAccess('layout', 'themes'))
+		{
+			return;
+		}
+
+		// Check if the content block is in use
+		$objContentPattern = \ContentPatternModel::findById($dc->id);
+		$objContentBlock = \ContentBlocksModel::findById($objContentPattern->pid);
+		
+		if (\ContentModel::countBy('type', $objContentBlock->alias) > 0)
+		{
+			Message::addInfo('Be aware on changes. The content block element is already in use!!');
+		}
+
+	}
+
+	
 	/**
 	 * Return the "toggle visibility" button
 	 *
