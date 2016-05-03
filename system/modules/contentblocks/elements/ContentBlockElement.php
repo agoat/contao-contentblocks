@@ -103,7 +103,7 @@ class ContentBlockElement extends \ContentElement
 			return '';
 		}
 
-		$this->Template = new \FrontendTemplate($this->strTemplate);
+		$this->Template = new \ContentBlockTemplate($this->strTemplate);
 		$this->Template->setData($this->arrData);
 		$this->Template->inColumn = $this->strColumn;
 
@@ -113,7 +113,7 @@ class ContentBlockElement extends \ContentElement
 		}
 
 		$this->compile();
-
+		
 		return $this->Template->parse();
 	}
 

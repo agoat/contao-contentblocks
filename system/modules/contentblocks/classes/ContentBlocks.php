@@ -58,6 +58,10 @@ class ContentBlocks extends \Controller
 					}
 				}
 				
+				// add content block template css
+				$this->addTemplatesCSS();
+				
+				
 				// add extra content block css
 				if (is_array($GLOBALS['TL_CB_CSS']))
 				{
@@ -70,6 +74,35 @@ class ContentBlocks extends \Controller
 			}
 
 		}
+	}
+
+	public function addTemplatesCSS ($strBuffer='', $objTemplate=null)
+	{
+		foreach (array('css', 'scss' , 'less') as $strType)
+		{
+			if ($GLOBALS['TL_CTB_' . $strType] == '')
+			{
+				continue;
+			}
+
+			$strKey = substr(md5($strType . $GLOBALS['TL_CTB_css'] . $GLOBALS['TL_CTB_scss'] . $GLOBALS['TL_CTB_less']), 0, 12);
+			$strPath = 'assets/css/' . $strKey . '.' . $strType;
+			
+			// Write to a temporary file in the assets folder
+			if (!file_exists($strPath))
+			{
+				$objFile = new \File($strPath, true);
+				$objFile->write($GLOBALS['TL_CTB_' . $strType]);
+				$objFile->close();
+			}
+				
+			$strPath .= '|static';
+			
+			// add file path to TL_USER_CSS
+			$GLOBALS[TL_USER_CSS][] = $strPath;
+		}
+
+		return $strBuffer;
 	}
 
 	
@@ -234,7 +267,7 @@ class ContentBlocks extends \Controller
 		}
 		else
 		{
-			// HOOK: custom method to discover the theme
+			// HOOK: custom method to discover the layout id
 			if (isset($GLOBALS['TL_HOOKS']['getLayoutId']) && is_array($GLOBALS['TL_HOOKS']['getLayoutId']))
 			{
 				foreach ($GLOBALS['TL_HOOKS']['getLayoutId'] as $callback)
