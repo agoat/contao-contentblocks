@@ -74,6 +74,12 @@
 			<trans-unit id="tl_content_pattern.options.1">
 				<source>Enter a list of values (with labels).</source>
 			</trans-unit>
+			<trans-unit id="tl_content_pattern.blankOption.0">
+				<source>Blank option</source>
+			</trans-unit>
+			<trans-unit id="tl_content_pattern.blankOption.1">
+				<source>Adds a blank option for the drop down menu.</source>
+			</trans-unit>
 			<trans-unit id="tl_content_pattern.multiSelect.0">
 				<source>Multiple selection</source>
 			</trans-unit>

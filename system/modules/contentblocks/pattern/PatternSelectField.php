@@ -28,7 +28,7 @@ class PatternSelectField extends \Pattern
 		$class = ($this->classClr) ? 'w50 clr' : 'w50';
 
 		// Generate options
-		$strGroup = '-';
+		$strGroup = 'default';
 		foreach (deserialize($this->options) as $arrOption)
 		{
 			if ($arrOption['group'])
@@ -42,10 +42,14 @@ class PatternSelectField extends \Pattern
 				$default = $arrOption['value'];
 			}	
 			
-			$arrOptions[$strGroup][$arrOption['value']] = $arrOption['label'];
-			//$arrOptions[$strGroup][] = $arrOption['value'];
-
-		}		
+			$arrOptions[$strGroup]['v'.$arrOption['value']] = $arrOption['label'];
+		}
+		
+		// no groups 
+		if (count($arrOptions) < 2)
+		{
+			$arrOptions = $arrOptions['default'];
+		}
 
 
 		parent::construct('selectField', array
@@ -56,8 +60,9 @@ class PatternSelectField extends \Pattern
 			'options'		=>	$arrOptions,
 			'eval'			=>	array
 			(
-				'mandatory'		=>	($this->mandatory) ? true : false, 
-				'tl_class'		=>	$class,
+				'mandatory'				=>	($this->mandatory) ? true : false, 
+				'includeBlankOption'	=>	($this->blankOption) ? true : false,
+				'tl_class'				=>	$class,
 			),
 		));
 		
@@ -106,7 +111,7 @@ class PatternSelectField extends \Pattern
 	public function compile()
 	{
 		
-		parent::compile($this->Value->selectField);
+		parent::compile(substr($this->Value->selectField,1));
 		
 	}
 	
