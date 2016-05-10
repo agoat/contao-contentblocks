@@ -24,10 +24,7 @@ class PatternFileTree extends \Pattern
 	 */
 	public function construct()
 	{
-	
-		// if multisrc
-		// generate multisrc field
-		// extensions
+		// set some options
 		switch ($this->source)
 		{
 			case 'image':

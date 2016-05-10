@@ -298,7 +298,6 @@ class tl_content_element extends tl_content
 	 */
 	public function savePatternFields (&$dc)
 	{
-	
 		foreach ($this->arrModifiedValues as $rid => $pattern)
 		{
 			foreach ($pattern as $pid => $fields)
@@ -522,9 +521,9 @@ class tl_content_element extends tl_content
 	{
 		// Prepare the order field
 		$id = explode('_', $dc->field);
-		$orderSRC = deserialize($this->arrLoadedValues['orderSRC'][$id[1]][$id[2]]);
+		$orderSRC = deserialize($this->arrLoadedValues[$id[2]][$id[1]]['orderSRC']);
 		$GLOBALS['TL_DCA']['tl_content']['fields'][$dc->field]['eval']['orderSRC_'.$id[1].'_'.$id[2]] = (is_array($orderSRC)) ? $orderSRC : array();
-		
+
 		return $value;
 	}
 
@@ -536,8 +535,7 @@ class tl_content_element extends tl_content
 		// Prepare the order field
 		$id = explode('_', $dc->field);
 		$orderSRC = array_map('StringUtil::uuidToBin', explode(',', \Input::post('orderSRC_'.$id[1].'_'.$id[2])));
-		$this->arrModifiedValues[$id[2]][$id[1]][$id[0]] = $orderSRC;
-		
+		$this->arrModifiedValues[$id[2]][$id[1]]['orderSRC'] = $orderSRC;
 		return $value;
 	}
 
