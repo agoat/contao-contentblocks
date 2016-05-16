@@ -21,7 +21,7 @@ ClassLoader::addClasses(array
 	'Contao\\ContentBlocks'			=> 'system/modules/contentblocks/classes/ContentBlocks.php',
 	'Contao\\Pattern'				=> 'system/modules/contentblocks/classes/Pattern.php',
 	'Contao\\ContentBlockTemplate'	=> 'system/modules/contentblocks/classes/ContentBlockTemplate.php',
-	'Contao\\Theme'					=> 'system/modules/contentblocks/classes/Theme.php', // overwrite Theme class for import and outport
+	'Contao\\Theme'					=> 'system/modules/contentblocks/classes/Theme.php', // overwrite Theme class for import and export
 
 	// Elements
 	'Contao\\ContentBlockElement'	=> 'system/modules/contentblocks/elements/ContentBlockElement.php',
