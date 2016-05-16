@@ -161,6 +161,7 @@ $GLOBALS['TL_DCA']['tl_content_blocks'] = array
 		),
 		'alias' => array
 		(
+			'eval'                    => array('doNotCopy'=>true),
 			'sql'                     => "varchar(128) COLLATE utf8_bin NOT NULL default ''",
 		),
 		'description' => array
@@ -284,7 +285,6 @@ class tl_content_blocks extends Backend
 	
 	public function generateAlias (DataContainer $dc)
 	{
-	
 		// generate the alias from the title
 		$alias = StringUtil::generateAlias($dc->activeRecord->title);
 
