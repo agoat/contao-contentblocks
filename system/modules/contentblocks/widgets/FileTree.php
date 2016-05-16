@@ -11,7 +11,6 @@
  * @license	  LGPL-3.0+
  */
 
-
 namespace Contao;
 
 
@@ -73,16 +72,14 @@ class FileTree extends \Widget
 			{
 				// Retrieve the order value
 				$objRow = $this->Database->prepare("SELECT {$this->orderField} FROM {$this->strTable} WHERE id=?")
-										->limit(1)
-										->execute($this->activeRecord->id);
+										 ->limit(1)
+										 ->execute($this->activeRecord->id);
 
 				$tmp = deserialize($objRow->{$this->orderField});
-			
-			
 				$this->{$this->orderField} = (!empty($tmp) && is_array($tmp)) ? array_filter($tmp) : array();
 			}
+			
 		}
-
 	}
 
 
@@ -100,16 +97,13 @@ class FileTree extends \Widget
 		{
 			$arrNew = array_map('StringUtil::uuidToBin', explode(',', \Input::post($this->strOrderName)));
 
-			if (strpos($this->orderField,'_') === false)
+			// Only proceed if the value has changed
+			if ($arrNew !== $this->{$this->orderField} && strpos($this->orderField,'_') === false)
 			{
-				// Only proceed if the value has changed
-				if ($arrNew !== $this->{$this->orderField})
-				{
-					$this->Database->prepare("UPDATE {$this->strTable} SET tstamp=?, {$this->orderField}=? WHERE id=?")
-								->execute(time(), serialize($arrNew), $this->activeRecord->id);
+				$this->Database->prepare("UPDATE {$this->strTable} SET tstamp=?, {$this->orderField}=? WHERE id=?")
+							   ->execute(time(), serialize($arrNew), $this->activeRecord->id);
 
-					$this->objDca->createNewVersion = true; // see #6285
-				}
+				$this->objDca->createNewVersion = true; // see #6285
 			}
 		}
 
@@ -309,7 +303,7 @@ class FileTree extends \Widget
 
 		// Convert the binary UUIDs
 		$strSet = implode(',', array_map('StringUtil::binToUuid', $arrSet));
-		$strOrder = $blnHasOrder ? implode(',', array_map('StringUtil::binToUuid', $this->{$this->orderField})) : '';
+		$strOrder = ($blnHasOrder) ? implode(',', array_map('StringUtil::binToUuid', $this->{$this->orderField})) : '';
 
 		$return = '<input type="hidden" name="'.$this->strName.'" id="ctrl_'.$this->strId.'" value="'.$strSet.'">' . ($blnHasOrder ? '
   <input type="hidden" name="'.$this->strOrderName.'" id="ctrl_'.$this->strOrderId.'" value="'.$strOrder.'">' : '') . '

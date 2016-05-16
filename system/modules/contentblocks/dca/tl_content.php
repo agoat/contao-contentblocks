@@ -534,8 +534,9 @@ class tl_content_element extends tl_content
 	{
 		// Prepare the order field
 		$id = explode('_', $dc->field);
-		$orderSRC = array_map('StringUtil::uuidToBin', explode(',', \Input::post('orderSRC_'.$id[1].'_'.$id[2])));
+		$orderSRC = (\Input::post('orderSRC_'.$id[1].'_'.$id[2])) ? array_map('StringUtil::uuidToBin', explode(',', \Input::post('orderSRC_'.$id[1].'_'.$id[2]))) : false;
 		$this->arrModifiedValues[$id[2]][$id[1]]['orderSRC'] = $orderSRC;
+		
 		return $value;
 	}
 
