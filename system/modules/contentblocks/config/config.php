@@ -29,7 +29,9 @@ $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('ContentBlocks','setNewsArti
 
 $GLOBALS['TL_HOOKS']['parseTemplate'][] = array('ContentBlocks','addPageLayoutToBE');
 
-$GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('ContentBlocks','addTemplatesCSS');
+$GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('ContentBlocks','addContentBlockCSS');
+$GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('ContentBlocks','addContentBlockJS');
+$GLOBALS['TL_HOOKS']['generatePage'][] = array('ContentBlocks','addLayoutJS');
 
 
 /**

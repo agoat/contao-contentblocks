@@ -23,16 +23,21 @@ class ContentBlocks extends \Controller
 	public function addPageLayoutToBE ($objTemplate)
 	{
 
-		// add the contentblocks backend stylesheets
+		// add the contentblocks backend style sheets
 		if (TL_MODE == 'BE')
 		{
 			if ($objTemplate->getName() == 'be_main' && Input::get('table') == 'tl_content')
 			{
-				
 				// Make sure TL_USER_CSS is set
 				if (!is_array($GLOBALS['TL_USER_CSS']))
 				{
 					$GLOBALS['TL_USER_CSS'] = array();
+				}
+
+				// Make sure TL_JAVASCRIPT is set
+				if (!is_array($GLOBALS['TL_JAVASCRIPT']))
+				{
+					$GLOBALS['TL_JAVASCRIPT'] = array();
 				}
 
 				if (\Input::get('do') && \Input::get('id'))
@@ -48,7 +53,13 @@ class ContentBlocks extends \Controller
 
 				$objLayout = \LayoutModel::findById($intLayoutId);
 
-				if ($objLayout !== null)
+				if ($objLayout === null)
+				{
+					return;
+				}
+				
+				// add backend CSS
+				if ($objLayout->backendCSS)
 				{
 					$objFile = \FilesModel::findByPk($objLayout->backendCSS);
 	
@@ -57,10 +68,32 @@ class ContentBlocks extends \Controller
 						$GLOBALS['TL_USER_CSS'][] = $objFile->path . '|static';
 					}
 				}
+
+				// add backend JS
+				if ($objLayout->backendJS)
+				{
+					$objFile = \FilesModel::findByPk($objLayout->backendJS);
+	
+					if ($objFile !== null)
+					{
+						$GLOBALS['TL_JAVASCRIPT'][] = $objFile->path . '|static';
+					}
+				}
+	
+	
+				// add content block template js
+				$this->addContentBlockJS();
+
+				// add jquery if active in layout
+				if ($objLayout->addJQuery && $objLayout->backendJS)
+				{
+					array_unshift($GLOBALS['TL_JAVASCRIPT'], 'system/modules/contentblocks/assets/jquery.noConflict.js|static');
+					array_unshift($GLOBALS['TL_JAVASCRIPT'], 'assets/jquery/core/' . $GLOBALS['TL_ASSETS']['JQUERY'] . '/jquery.min.js|static');
+				}
+
 				
 				// add content block template css
-				$this->addTemplatesCSS();
-				
+				$this->addContentBlockCSS();
 				
 				// add extra content block css
 				if (is_array($GLOBALS['TL_CB_CSS']))
@@ -68,25 +101,25 @@ class ContentBlocks extends \Controller
 					$GLOBALS['TL_USER_CSS'] = array_merge($GLOBALS['TL_USER_CSS'], $GLOBALS['TL_CB_CSS']);
 				}
 
-				// combine stylesheets
-				$objTemplate->stylesheets = $this->replaceDynamicScriptTags('[[TL_CSS]]');
+				
+				// combine stylesheets and javascripts
+				list($objTemplate->stylesheets, $objTemplate->javascripts) = explode('#', $this->replaceDynamicScriptTags('[[TL_CSS]]#[[TL_HEAD]]'));
 				
 			}
-
 		}
 	}
 
-	public function addTemplatesCSS ($strBuffer='', $objTemplate=null)
+	public function addContentBlockCSS ($strBuffer='', $objTemplate=null)
 	{
-		foreach (array('css', 'scss' , 'less') as $strType)
+		foreach (array('CSS', 'SCSS' , 'LESS') as $strType)
 		{
 			if ($GLOBALS['TL_CTB_' . $strType] == '')
 			{
 				continue;
 			}
 
-			$strKey = substr(md5($strType . $GLOBALS['TL_CTB_css'] . $GLOBALS['TL_CTB_scss'] . $GLOBALS['TL_CTB_less']), 0, 12);
-			$strPath = 'assets/css/' . $strKey . '.' . $strType;
+			$strKey = substr(md5($strType . $GLOBALS['TL_CTB_CSS'] . $GLOBALS['TL_CTB_SCSS'] . $GLOBALS['TL_CTB_LESS']), 0, 12);
+			$strPath = 'assets/css/' . $strKey . '.' . strtolower($strType);
 			
 			// Write to a temporary file in the assets folder
 			if (!file_exists($strPath))
@@ -99,12 +132,56 @@ class ContentBlocks extends \Controller
 			$strPath .= '|static';
 			
 			// add file path to TL_USER_CSS
-			$GLOBALS[TL_USER_CSS][] = $strPath;
+			$GLOBALS['TL_USER_CSS'][] = $strPath;
 		}
 
 		return $strBuffer;
 	}
 
+	public function addContentBlockJS ($strBuffer='', $objTemplate=null)
+	{
+		if ($GLOBALS['TL_CTB_JS'] == '')
+		{
+			return $strBuffer;
+		}
+
+		$strKey = substr(md5('js' . $GLOBALS['TL_CTB_JS']), 0, 12);
+		$strPath = 'assets/js/' . $strKey . '.js';
+		
+		// Write to a temporary file in the assets folder
+		if (!file_exists($strPath))
+		{
+			$objFile = new \File($strPath, true);
+			$objFile->write($GLOBALS['TL_CTB_JS']);
+			$objFile->close();
+		}
+			
+		$strPath .= '|static';
+		
+		// add file path to TL_JAVASCRIPT
+		$GLOBALS['TL_JAVASCRIPT'][] = $strPath;
+
+		return $strBuffer;
+	}
+
+	
+	public function addLayoutJS ($objPage, $objLayout)
+	{
+	
+		if ($objLayout->externalJS)
+		{
+			$objFile = \FilesModel::findByPk($objLayout->externalJS);
+
+			if ($objFile !== null)
+			{
+				$GLOBALS['TL_JAVASCRIPT'][] = $objFile->path . '|static';
+			}
+		}
+				
+		return $strBuffer;
+	}
+
+	
 	
 	// register new content elements (for content element class assignment)
 	public function loadAndRegisterBlockElements ()

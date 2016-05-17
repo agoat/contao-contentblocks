@@ -15,6 +15,7 @@
 // Palettes
 
 $GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = str_replace('loadingOrder', 'loadingOrder,backendCSS', $GLOBALS['TL_DCA']['tl_layout']['palettes']['default']);
+$GLOBALS['TL_DCA']['tl_layout']['palettes']['default'] = str_replace('analytics', 'analytics,externalJS,backendJS', $GLOBALS['TL_DCA']['tl_layout']['palettes']['default']);
 
 
 // Fields
@@ -23,6 +24,24 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['backendCSS'] = array
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['backendCSS'],
 	'exclude'                 => true,
 	'inputType'               => 'fileTree',
-	'eval'                    => array('fieldType'=>'radio', 'filesOnly'=>true, 'extensions'=>'css,scss,less', 'tl_class'=>'w50'),
+	'eval'                    => array('fieldType'=>'radio', 'filesOnly'=>true, 'extensions'=>'css,scss,less', 'tl_class'=>'clr w50'),
+	'sql'                     => "binary(16) NULL"
+);
+
+
+$GLOBALS['TL_DCA']['tl_layout']['fields']['externalJS'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['externalJS'],
+	'exclude'                 => true,
+	'inputType'               => 'fileTree',
+	'eval'                    => array('fieldType'=>'radio', 'filesOnly'=>true, 'extensions'=>'js', 'tl_class'=>'clr w50'),
+	'sql'                     => "binary(16) NULL"
+);
+$GLOBALS['TL_DCA']['tl_layout']['fields']['backendJS'] = array
+(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['backendJS'],
+	'exclude'                 => true,
+	'inputType'               => 'fileTree',
+	'eval'                    => array('fieldType'=>'radio', 'filesOnly'=>true, 'extensions'=>'js', 'tl_class'=>'clr w50'),
 	'sql'                     => "binary(16) NULL"
 );

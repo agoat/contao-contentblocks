@@ -59,6 +59,42 @@ class ContentBlockTemplate extends \FrontendTemplate
 
 	
 	/**
+	 * Add JS to template
+	 *
+	 * @return string The template markup
+	 */
+	public function addJS ($strJS, $bolStatic=true)
+	{
+		if ($strJS == '')
+		{
+			return;
+		}
+		
+		if (!$bolStatic)
+		{
+			$strKey = substr(md5('js' . $strJS), 0, 12);
+			$strPath = 'assets/js/' . $strKey . '.js';
+			
+			// Write to a temporary file in the assets folder
+			if (!file_exists($strPath))
+			{
+				$objFile = new \File($strPath, true);
+				$objFile->write($strCSS);
+				$objFile->close();
+			}
+			
+			// add file path to TL_USER_CSS
+			$GLOBALS[TL_JAVASCRIPT][] = $strPath;
+		
+			return;
+		}
+		// add to combined CSS string
+		$GLOBALS['TL_CTB_JS'] .= $strJS;
+	}
+
+	
+	
+	/**
 	 * Insert a template
 	 *
 	 * @param string $name The template name
