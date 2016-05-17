@@ -58,4 +58,41 @@ class ContentBlockTemplate extends \FrontendTemplate
 	}
 
 	
+	/**
+	 * Insert a template
+	 *
+	 * @param string $name The template name
+	 * @param array  $data An optional data array
+	 */
+	public function insert($name, array $data=null)
+	{
+		
+		// register the template file (to find the custom templates)
+		if (!array_key_exists($name, \TemplateLoader::getFiles()))
+		{
+			$objTheme = \LayoutModel::findById(\ContentBlocks::getLayoutId($this->ptable, $this->pid))->getRelated('pid');
+			
+			\TemplateLoader::addFile($name, $objTheme->templates);
+		}
+
+		
+		/** @var \Template $tpl */
+		if ($this instanceof \Template)
+		{
+			$tpl = new static($name);
+		}
+		elseif (TL_MODE == 'BE')
+		{
+			$tpl = new \BackendTemplate($name);
+		}
+		else
+		{
+			$tpl = new \FrontendTemplate($name);
+		}
+		if ($data !== null)
+		{
+			$tpl->setData($data);
+		}
+		echo $tpl->parse();
+	}
 }
