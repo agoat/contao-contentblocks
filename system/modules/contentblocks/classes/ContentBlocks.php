@@ -186,7 +186,12 @@ class ContentBlocks extends \Controller
 	// register new content elements (for content element class assignment)
 	public function loadAndRegisterBlockElements ()
 	{
-		
+		// Don´t register twice
+		if (is_array($GLOBALS['TL_CTB'])) 
+		{
+			return;
+		}
+
 		$this->import("Database");
 
 		if ($this->Database->tableExists("tl_content_blocks"))
@@ -208,7 +213,10 @@ class ContentBlocks extends \Controller
 			$arrCTE['ctb'][$arrElement['alias']] = 'ContentBlockElement';			
 		}
 
-		array_insert($GLOBALS['TL_CTE'], 0, $arrCTE); // add to standard content elements		
+		// add to registry
+		$GLOBALS['TL_CTB'] = $arrCTE; // content block elements
+		
+		array_insert($GLOBALS['TL_CTE'], 0, $arrCTE); // add to content elements array
 
 	}
 
