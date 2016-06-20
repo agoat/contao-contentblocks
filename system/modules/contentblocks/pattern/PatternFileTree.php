@@ -386,19 +386,17 @@ class PatternFileTree extends \Pattern
 					'id'        => $objFiles->id,
 					'uuid'      => $objFiles->uuid,
 					'name'      => $objFile->basename,
-					'src' 		=> $objFiles->path,
+					'path' 		=> $objFiles->path,
 					'size'		=> ($this->canChangeSize) ? $this->Value->size : $this->size,
-					'title'     => $arrMeta['title'],
 					'alt'       => $arrMeta['title'],
-					'link'  	=> $arrMeta['title'],
+					'title'     => $arrMeta['title'],
 					'imageUrl'  => $arrMeta['link'],
 					'caption'   => $arrMeta['caption'],
 					'href'      => $strHref,
 					'filesize'  => $this->getReadableSize($objFile->filesize, 1),
 					'icon'      => TL_ASSETS_URL . 'assets/contao/images/' . $objFile->icon,
 					'mime'      => $objFile->mime,
-					'extension' => $objFile->extension,
-					'path'      => $objFile->dirname
+					'extension' => $objFile->extension
 				);
 				
 				$auxDate[] = $objFile->mtime;
@@ -489,21 +487,20 @@ class PatternFileTree extends \Pattern
 					// Add the image
 					$files[$objSubfiles->path] = array
 					(
-						'id'        => $objSubfiles->id,
-						'uuid'      => $objSubfiles->uuid,
+						'id'        => $objFiles->id,
+						'uuid'      => $objFiles->uuid,
 						'name'      => $objFile->basename,
-						'src'		=> $objSubfiles->path,
+						'path' 		=> $objFiles->path,
 						'size'		=> ($this->canChangeSize) ? $this->Value->size : $this->size,
-						'title'     => $arrMeta['title'],
 						'alt'       => $arrMeta['title'],
+						'title'     => $arrMeta['title'],
 						'imageUrl'  => $arrMeta['link'],
 						'caption'   => $arrMeta['caption'],
 						'href'      => $strHref,
 						'filesize'  => $this->getReadableSize($objFile->filesize, 1),
 						'icon'      => TL_ASSETS_URL . 'assets/contao/images/' . $objFile->icon,
 						'mime'      => $objFile->mime,
-						'extension' => $objFile->extension,
-						'path'      => $objFile->dirname
+						'extension' => $objFile->extension
 					);
 					
 					$auxDate[] = $objFile->mtime;
@@ -603,15 +600,17 @@ class PatternFileTree extends \Pattern
 			$pictures = array();
 			foreach ($files as $key=>$image)
 			{
-				$image['singleSRC'] = $image['src'];
-				$this->addImageToTemplate($pictures[$key] = new \stdClass(), $image);		
+				$image['singleSRC'] = $image['path'];
+				
+				$this->addImageToTemplate($pictures[$key] = new \stdClass(), $image);	
+				
 				$pictures[$key] = $pictures[$key]->picture;
+				$pictures[$key]['imageUrl'] = $image['imageUrl'];
+				$pictures[$key]['caption'] = $image['caption'];
 				$pictures[$key]['id'] = $image['id'];
-				$pictures[$key]['src'] = $image['src'];
 				$pictures[$key]['uuid'] = $image['uuid'];
 				$pictures[$key]['name'] = $image['name'];
 				$pictures[$key]['path'] = $image['path'];
-				$pictures[$key]['caption'] = $image['caption'];
 				$pictures[$key]['extension'] = $image['extension'];
 			}
 			

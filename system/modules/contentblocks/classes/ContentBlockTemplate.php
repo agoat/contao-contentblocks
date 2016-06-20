@@ -30,6 +30,10 @@ class ContentBlockTemplate extends \FrontendTemplate
 	 */
 	public function addImage ($image, $mode, $width=0, $height=0)
 	{
+		if (!is_array($image))
+		{
+			return;
+		}
 		
 		if (is_numeric($mode))
 		{
@@ -41,15 +45,17 @@ class ContentBlockTemplate extends \FrontendTemplate
 		}
 		
 		$image['size'] = $size;
-		$image['singleSRC'] = $image['src'];
-		$this->addImageToTemplate($picture = new \stdClass(), $image);		
+		$image['singleSRC'] = $image['path'];
+		
+		$this->addImageToTemplate($picture = new \stdClass(), $image);	
+		
 		$picture = $picture->picture;
+		$picture['imageUrl'] = $image['imageUrl'];
+		$picture['caption'] = $image['caption'];
 		$picture['id'] = $image['id'];
-		$picture['src'] = $image['src'];
 		$picture['uuid'] = $image['uuid'];
 		$picture['name'] = $image['name'];
 		$picture['path'] = $image['path'];
-		$picture['caption'] = $image['caption'];
 		$picture['extension'] = $image['extension'];
 
 		// Return new image object
