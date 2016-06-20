@@ -607,11 +607,12 @@ class PatternFileTree extends \Pattern
 				$this->addImageToTemplate($pictures[$key] = new \stdClass(), $image);		
 				$pictures[$key] = $pictures[$key]->picture;
 				$pictures[$key]['id'] = $image['id'];
+				$pictures[$key]['src'] = $image['src'];
 				$pictures[$key]['uuid'] = $image['uuid'];
 				$pictures[$key]['name'] = $image['name'];
+				$pictures[$key]['path'] = $image['path'];
 				$pictures[$key]['caption'] = $image['caption'];
 				$pictures[$key]['extension'] = $image['extension'];
-				$pictures[$key]['path'] = $image['path'];
 			}
 			
 			$files = $pictures;
