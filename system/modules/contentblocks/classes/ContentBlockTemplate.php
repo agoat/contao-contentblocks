@@ -19,9 +19,50 @@ class ContentBlockTemplate extends \FrontendTemplate
 {
 	
 	/**
+	 * Add Image to template
+	 *
+	 * @param object           $image The element or module as array
+	 * @param object|\Model    $imageSize The image size or image size item model
+	 * @param integer $width   An optional width of the image
+	 * @param integer $height  An optional height of the image
+	 *
+	 * @return object  new image
+	 */
+	public function addImage ($image, $mode, $width=0, $height=0)
+	{
+		
+		if (is_numeric($mode))
+		{
+			$size = (int) $mode;
+		}
+		else
+		{
+			$size = array($width, $height, $mode);
+		}
+		
+		$image['size'] = $size;
+		$image['singleSRC'] = $image['src'];
+		$this->addImageToTemplate($picture = new \stdClass(), $image);		
+		$picture = $picture->picture;
+		$picture['id'] = $image['id'];
+		$picture['src'] = $image['src'];
+		$picture['uuid'] = $image['uuid'];
+		$picture['name'] = $image['name'];
+		$picture['path'] = $image['path'];
+		$picture['caption'] = $image['caption'];
+		$picture['extension'] = $image['extension'];
+
+		// Return new image object
+		return $picture;
+	}
+
+	
+	/**
 	 * Add CSS to template
 	 *
-	 * @return string The template markup
+	 * @param string   The css, scss or less content
+	 * @param string   The type of the content
+	 * @param boolean  If false, add the content in a extra file (only when type is css)
 	 */
 	public function addCSS ($strCSS, $strType='scss', $bolStatic=true)
 	{
@@ -61,7 +102,8 @@ class ContentBlockTemplate extends \FrontendTemplate
 	/**
 	 * Add JS to template
 	 *
-	 * @return string The template markup
+	 * @param string   The javascript content
+	 * @param boolean  If false, add the content in a extra file
 	 */
 	public function addJS ($strJS, $bolStatic=true)
 	{
