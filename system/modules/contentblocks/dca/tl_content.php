@@ -145,28 +145,32 @@ class tl_content_element extends tl_content
 	
 			$objLayout = \LayoutModel::findById($intLayoutId);
 
-
 			// try to find default content block element
 			if (is_array($GLOBALS['TL_CTB_DEFAULT']) && $objLayout)
 			{
 				$strDefaultCTB = $GLOBALS['TL_CTB_DEFAULT'][$objLayout->pid];
 			}
-			
-			// return contao default text element as standard if no default content block is found
+		
+			// if no default content block is found 
 			if (!$strDefaultCTB)
 			{
-				return (is_array($GLOBALS['TL_CTB'])) ? '' : 'text';
-			}
-			else
-			{
-				$objContent = \ContentModel::findByPk($dc->id);
-
-				$objContent->type = $strDefaultCTB;
-				$objContent->save();
+				if (\Config::get('overwriteCTE'))
+				{
+					return ''; // return and do not save and redirect (results in endless redirection)
 					
-				$this->redirect(\Environment::get('request'));
+				}
+				else
+				{
+					$strDefaultCTB = 'text';
+				}
 			}
-			
+
+			$objContent = \ContentModel::findByPk($dc->id);
+
+			$objContent->type = $strDefaultCTB;
+			$objContent->save();
+				
+			$this->redirect(\Environment::get('request'));
 		}
 	
 		return $value;
