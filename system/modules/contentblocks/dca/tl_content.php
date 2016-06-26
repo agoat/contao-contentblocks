@@ -89,17 +89,19 @@ class tl_content_element extends tl_content
 	{
 		// try to get the theme id
 		$intLayoutId = \ContentBlocks::getLayoutId($dc->activeRecord->ptable,  $dc->activeRecord->pid);
-		
+	
 		$objLayout = \LayoutModel::findById($intLayoutId);	
 
-		// don´t try to add content block elements if nothing exists
+		// try to find content block elements for the theme
 		if (is_array($GLOBALS['TL_CTB']) && $objLayout)
 		{
 			$arrCTB = $GLOBALS['TL_CTB'][$objLayout->pid];
 		}
-		else
+		
+		// return an empty array if nothing found
+		if (!$arrCTB)
 		{
-			$arrCTB = array(); // of no content block exist or no theme id determined return an empty array
+			$arrCTB = array();
 		}
 
 		// hide the contao content elements
@@ -138,20 +140,33 @@ class tl_content_element extends tl_content
 	{
 		if (!$value)
 		{
-			$objContent = \ContentModel::findByPk($dc->id);
+			// try to get the theme id
 			$intLayoutId = \ContentBlocks::getLayoutId($dc->activeRecord->ptable,  $dc->activeRecord->pid);
 	
 			$objLayout = \LayoutModel::findById($intLayoutId);
 
-			if ($objLayout === null) 
+
+			// try to find default content block element
+			if (is_array($GLOBALS['TL_CTB_DEFAULT']) && $objLayout)
+			{
+				$strDefaultCTB = $GLOBALS['TL_CTB_DEFAULT'][$objLayout->pid];
+			}
+			
+			// return contao default text element as standard if no default content block is found
+			if (!$strDefaultCTB)
 			{
 				return (is_array($GLOBALS['TL_CTB'])) ? '' : 'text';
 			}
+			else
+			{
+				$objContent = \ContentModel::findByPk($dc->id);
+
+				$objContent->type = $strDefaultCTB;
+				$objContent->save();
+					
+				$this->redirect(\Environment::get('request'));
+			}
 			
-			$objContent->type = (is_array($GLOBALS['TL_CTB'])) ? $GLOBALS['TL_CTB_DEFAULT'][$objLayout->pid] : 'text';
-			$objContent->save();
-				
-			$this->redirect(\Environment::get('request'));
 		}
 	
 		return $value;
