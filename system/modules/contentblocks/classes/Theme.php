@@ -566,23 +566,10 @@ class Theme extends \Backend
 							}
 						}
 
-						// Adjust duplicate content block titles
-						elseif ($table == 'tl_content_blocks' && $name == 'title')
-						{
-							$objCount = $this->Database->prepare("SELECT COUNT(*) AS count FROM ". $table ." WHERE title=?")
-													   ->execute($value);
-
-							if ($objCount->count > 0)
-							{
-								$value = preg_replace('/( |\-)[0-9]+$/', '', $value);
-								$value .= ' ' . ${$table};
-							}
-						}
-
 						// Adjust content block alias
 						elseif ($table == 'tl_content_blocks' && $name == 'alias')
 						{
-							$value = StringUtil::generateAlias($set['title']);
+							$value = StringUtil::generateAlias($set['title'].'-'.$set['id']);
 						}
 
 						// Adjust the file paths in style sheets and tl_files

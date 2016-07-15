@@ -156,7 +156,7 @@ $GLOBALS['TL_DCA']['tl_content_blocks'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50', 'unique'=>true),
+			'eval'                    => array('mandatory'=>true, 'maxlength'=>128, 'tl_class'=>'w50'),
 			'sql'                     => "varchar(128) NOT NULL default ''"
 		),
 		'alias' => array
@@ -286,7 +286,7 @@ class tl_content_blocks extends Backend
 	public function generateAlias (DataContainer $dc)
 	{
 		// generate the alias from the title
-		$alias = StringUtil::generateAlias($dc->activeRecord->title);
+		$alias = StringUtil::generateAlias($dc->activeRecord->title.'-'.$dc->activeRecord->id);
 
 		if ($alias != $dc->activeRecord->alias)
 		{
