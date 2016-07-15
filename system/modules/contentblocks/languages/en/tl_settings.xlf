@@ -11,11 +11,11 @@
 			<trans-unit id="tl_settings.overwriteCTE.1">
 				<source>Show only the content blocks as new content element type (existing standard content elements will still be editable).</source>
 			</trans-unit>
-			<trans-unit id="tl_settings.loadCSSintoBE.0">
-				<source>Load stylesheets into Backend</source>
+			<trans-unit id="tl_settings.disableVisualSelect.0">
+				<source>Disable visual content element selection</source>
 			</trans-unit>
-			<trans-unit id="tl_settings.loadCSSintoBE.1">
-				<source>Load the frontend stylesheets and content block stylesheets into the backend when showing the tl_content table (editing article and news content).</source>
+			<trans-unit id="tl_settings.disableVisualSelect.1">
+				<source>Shows the standard content element selection widget.</source>
 			</trans-unit>
 			<trans-unit id="tl_settings.validVideoTypes.0">
 				<source>Video file types</source>

@@ -30,8 +30,10 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['guests']['filter'] = false;
 
 
 // new type selection widget
-$GLOBALS['TL_DCA']['tl_content']['fields']['type']['inputType'] = 'visualselect';
-
+if (!\Config::get('disableVisualSelect'))
+{
+	$GLOBALS['TL_DCA']['tl_content']['fields']['type']['inputType'] = 'visualselect';
+}
 
 // new options callback to get new content block elements
 $GLOBALS['TL_DCA']['tl_content']['fields']['type']['options_callback'] = array('tl_content_element', 'getContentElements');

@@ -13,7 +13,7 @@
 
 
 // legacy mode
-$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = str_replace('maintenanceMode', 'maintenanceMode;{elements_legend},overwriteCTE', $GLOBALS['TL_DCA']['tl_settings']['palettes']['default']);
+$GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = str_replace('maintenanceMode', 'maintenanceMode;{elements_legend},overwriteCTE,disableVisualSelect', $GLOBALS['TL_DCA']['tl_settings']['palettes']['default']);
 
 // more file types
 $GLOBALS['TL_DCA']['tl_settings']['palettes']['default'] = str_replace('validImageTypes', 'validImageTypes,validVideoTypes,validAudioTypes', $GLOBALS['TL_DCA']['tl_settings']['palettes']['default']);
@@ -27,9 +27,9 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['overwriteCTE'] = array
 	'inputType'               => 'checkbox',
 	'eval'                    => array('tl_class'=>'w50'),
 );
-$GLOBALS['TL_DCA']['tl_settings']['fields']['loadCSSintoBE'] = array
+$GLOBALS['TL_DCA']['tl_settings']['fields']['disableVisualSelect'] = array
 (
-	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['loadCSSintoBE'],
+	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['disableVisualSelect'],
 	'inputType'               => 'checkbox',
 	'eval'                    => array('tl_class'=>'w50'),
 );
@@ -44,7 +44,6 @@ $GLOBALS['TL_DCA']['tl_settings']['fields']['validVideoTypes'] = array
 		array('tl_settings_change', 'checkVideoTypes')
 	)
 );
-
 $GLOBALS['TL_DCA']['tl_settings']['fields']['validAudioTypes'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_settings']['validAudioTypes'],
