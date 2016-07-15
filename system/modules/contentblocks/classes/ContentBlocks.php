@@ -59,28 +59,114 @@ class ContentBlocks extends \Controller
 				}
 				
 				// add backend CSS
-				if ($objLayout->backendCSS)
+				$arrBackendCSS = deserialize($objLayout->backendCSS);
+				
+				if (!empty($arrBackendCSS) && is_array($arrBackendCSS))
 				{
-					$objFile = \FilesModel::findByPk($objLayout->backendCSS);
-	
-					if ($objFile !== null)
+					// Consider the sorting order (see #5038)
+					if ($objLayout->orderBackendCSS != '')
 					{
-						$GLOBALS['TL_USER_CSS'][] = $objFile->path . '|static';
+						$tmp = deserialize($objLayout->orderBackendCSS);
+						
+						if (!empty($tmp) && is_array($tmp))
+						{
+							// Remove all values
+							$arrOrder = array_map(function(){}, array_flip($tmp));
+							
+							// Move the matching elements to their position in $arrOrder
+							foreach ($arrBackendCSS as $k=>$v)
+							{
+								if (array_key_exists($v, $arrOrder))
+								{
+									$arrOrder[$v] = $v;
+									unset($arrBackendCSS[$k]);
+								}
+							}
+							
+							// Append the left-over style sheets at the end
+							if (!empty($arrBackendCSS))
+							{
+								$arrOrder = array_merge($arrOrder, array_values($arrBackendCSS));
+							}
+							
+							// Remove empty (unreplaced) entries
+							$arrBackendCSS = array_values(array_filter($arrOrder));
+							unset($arrOrder);
+						}
 					}
-				}
+					
+					// Get the file entries from the database
+					$objFiles = \FilesModel::findMultipleByUuids($arrBackendCSS);
+					
+					if ($objFiles !== null)
+					{
+						while ($objFiles->next())
+						{
+							if (file_exists(TL_ROOT . '/' . $objFiles->path))
+							{
+								$GLOBALS['TL_USER_CSS'][] = $objFiles->path . '|static';
+							}
+						}
+					}
 
+					unset($objFiles);
+				}
+				
 				// add backend JS
-				if ($objLayout->backendJS)
+				$arrBackendJS = deserialize($objLayout->backendJS);
+				
+				if (!empty($arrBackendJS) && is_array($arrBackendJS))
 				{
-					$objFile = \FilesModel::findByPk($objLayout->backendJS);
-	
-					if ($objFile !== null)
+					// Consider the sorting order (see #5038)
+					if ($objLayout->orderBackendJS != '')
 					{
-						$GLOBALS['TL_JAVASCRIPT'][] = $objFile->path . '|static';
+						$tmp = deserialize($objLayout->orderBackendJS);
+						
+						if (!empty($tmp) && is_array($tmp))
+						{
+							// Remove all values
+							$arrOrder = array_map(function(){}, array_flip($tmp));
+							
+							// Move the matching elements to their position in $arrOrder
+							foreach ($arrBackendJS as $k=>$v)
+							{
+								if (array_key_exists($v, $arrOrder))
+								{
+									$arrOrder[$v] = $v;
+									unset($arrBackendJS[$k]);
+								}
+							}
+							
+							// Append the left-over style sheets at the end
+							if (!empty($arrBackendJS))
+							{
+								$arrOrder = array_merge($arrOrder, array_values($arrBackendJS));
+							}
+							
+							// Remove empty (unreplaced) entries
+							$arrBackendJS = array_values(array_filter($arrOrder));
+							unset($arrOrder);
+						}
 					}
+					
+					// Get the file entries from the database
+					$objFiles = \FilesModel::findMultipleByUuids($arrBackendJS);
+					
+					if ($objFiles !== null)
+					{
+						while ($objFiles->next())
+						{
+							if (file_exists(TL_ROOT . '/' . $objFiles->path))
+							{
+								$GLOBALS['TL_JAVASCRIPT'][] = $objFiles->path . '|static';
+							}
+						}
+					}
+
+					unset($objFiles);
 				}
 	
-	
+
 				// add content block template js
 				$this->addContentBlockJS();
 
@@ -167,18 +253,60 @@ class ContentBlocks extends \Controller
 	
 	public function addLayoutJS ($objPage, $objLayout)
 	{
-	
-		if ($objLayout->externalJS)
+		$arrExternalJS = deserialize($objLayout->externalJS);
+		
+		if (!empty($arrExternalJS) && is_array($arrExternalJS))
 		{
-			$objFile = \FilesModel::findByPk($objLayout->externalJS);
-
-			if ($objFile !== null)
+			// Consider the sorting order (see #5038)
+			if ($objLayout->orderBackendJS != '')
 			{
-				$GLOBALS['TL_JAVASCRIPT'][] = $objFile->path . '|static';
-			}
-		}
+				$tmp = deserialize($objLayout->orderExternalJS);
 				
-		return $strBuffer;
+				if (!empty($tmp) && is_array($tmp))
+				{
+					// Remove all values
+					$arrOrder = array_map(function(){}, array_flip($tmp));
+					
+					// Move the matching elements to their position in $arrOrder
+					foreach ($arrExternalJS as $k=>$v)
+					{
+						if (array_key_exists($v, $arrOrder))
+						{
+							$arrOrder[$v] = $v;
+							unset($arrExternalJS[$k]);
+						}
+					}
+					
+					// Append the left-over style sheets at the end
+					if (!empty($arrExternalJS))
+					{
+						$arrOrder = array_merge($arrOrder, array_values($arrExternalJS));
+					}
+					
+					// Remove empty (unreplaced) entries
+					$arrExternalJS = array_values(array_filter($arrOrder));
+					unset($arrOrder);
+				}
+			}
+			
+			// Get the file entries from the database
+			$objFiles = \FilesModel::findMultipleByUuids($arrExternalJS);
+			
+			if ($objFiles !== null)
+			{
+				while ($objFiles->next())
+				{
+					if (file_exists(TL_ROOT . '/' . $objFiles->path))
+					{
+						$GLOBALS['TL_JAVASCRIPT'][] = $objFiles->path . '|static';
+					}
+				}
+			}
+
+			unset($objFiles);
+		}
+					
+		return;
 	}
 
 	

@@ -24,8 +24,12 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['backendCSS'] = array
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['backendCSS'],
 	'exclude'                 => true,
 	'inputType'               => 'fileTree',
-	'eval'                    => array('fieldType'=>'radio', 'filesOnly'=>true, 'extensions'=>'css,scss,less', 'tl_class'=>'clr w50'),
-	'sql'                     => "binary(16) NULL"
+	'eval'                    => array('multiple'=>true, 'orderField'=>'orderBackendCSS', 'fieldType'=>'checkbox', 'filesOnly'=>true, 'extensions'=>'css,scss,less', 'tl_class'=>'clr w50'),
+	'sql'                     => "blob NULL"
+);
+$GLOBALS['TL_DCA']['tl_layout']['fields']['orderBackendCSS'] = array
+(
+	'sql'                     => "blob NULL"
 );
 
 
@@ -34,14 +38,24 @@ $GLOBALS['TL_DCA']['tl_layout']['fields']['externalJS'] = array
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['externalJS'],
 	'exclude'                 => true,
 	'inputType'               => 'fileTree',
-	'eval'                    => array('fieldType'=>'radio', 'filesOnly'=>true, 'extensions'=>'js', 'tl_class'=>'clr w50'),
-	'sql'                     => "binary(16) NULL"
+	'eval'                    => array('multiple'=>true, 'orderField'=>'orderExternalJS', 'fieldType'=>'checkbox', 'filesOnly'=>true, 'extensions'=>'js', 'tl_class'=>'clr w50'),
+	'sql'                     => "blob NULL"
 );
+$GLOBALS['TL_DCA']['tl_layout']['fields']['orderExternalJS'] = array
+(
+	'sql'                     => "blob NULL"
+);
+
 $GLOBALS['TL_DCA']['tl_layout']['fields']['backendJS'] = array
 (
 	'label'                   => &$GLOBALS['TL_LANG']['tl_layout']['backendJS'],
 	'exclude'                 => true,
 	'inputType'               => 'fileTree',
-	'eval'                    => array('fieldType'=>'radio', 'filesOnly'=>true, 'extensions'=>'js', 'tl_class'=>'clr w50'),
-	'sql'                     => "binary(16) NULL"
+	'eval'                    => array('multiple'=>true, 'orderField'=>'orderBackendJS', 'fieldType'=>'checkbox', 'filesOnly'=>true, 'extensions'=>'js', 'tl_class'=>'clr w50'),
+	'sql'                     => "blob NULL"
 );
+$GLOBALS['TL_DCA']['tl_layout']['fields']['orderBackendJS'] = array
+(
+	'sql'                     => "blob NULL"
+);
+
