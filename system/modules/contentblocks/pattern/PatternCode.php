@@ -25,7 +25,7 @@ class PatternCode extends \Pattern
 	public function construct()
 	{
 		
-		parent::construct('text', array
+		$this->generateDCA('text', array
 		(
 			'inputType' 	=>	'textarea',
 			'label'			=>	array($this->label, $this->description),
@@ -71,7 +71,7 @@ class PatternCode extends \Pattern
 	{
 		// prepare value(s)
 		
-		parent::compile($this->Value->text);
+		$this->writeToTemplate($this->Value->text);
 	}
 	
 }

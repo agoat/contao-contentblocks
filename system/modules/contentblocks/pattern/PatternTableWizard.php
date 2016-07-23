@@ -26,7 +26,7 @@ class PatternTableWizard extends \Pattern
 	{
 
 
-		parent::construct('tableItems', array
+		$this->generateDCA('tableItems', array
 		(
 			'inputType' 	=>	'tableWizard',
 			'label'			=>	array($this->label, $this->description),
@@ -66,7 +66,7 @@ class PatternTableWizard extends \Pattern
 	public function compile()
 	{
 		
-		parent::compile(deserialize($this->Value->tableItems));
+		$this->writeToTemplate(deserialize($this->Value->tableItems));
 		
 	}
 	

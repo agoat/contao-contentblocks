@@ -27,7 +27,7 @@ class PatternExplanation extends \Pattern
 		
 		// an explanation field
 
-		parent::construct('explanation', array
+		$this->generateDCA('explanation', array
 		(
 			'inputType' =>	'explanation',
 			'eval'		=>	array

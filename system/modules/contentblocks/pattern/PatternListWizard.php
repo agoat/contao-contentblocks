@@ -26,7 +26,7 @@ class PatternListWizard extends \Pattern
 	{
 
 
-		parent::construct('listItems', array
+		$this->generateDCA('listItems', array
 		(
 			'inputType' 	=>	'listWizard',
 			'label'			=>	array($this->label, $this->description),
@@ -66,7 +66,7 @@ class PatternListWizard extends \Pattern
 	public function compile()
 	{
 		
-		parent::compile(deserialize($this->Value->listItems));
+		$this->writeToTemplate(deserialize($this->Value->listItems));
 		
 	}
 	

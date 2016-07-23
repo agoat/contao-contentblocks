@@ -27,7 +27,7 @@ class PatternCheckBox extends \Pattern
 
 		$class = ($this->classClr) ? 'w50 clr m12' : 'w50 m12';
 	
-		parent::construct('checkBox', array
+		$this->generateDCA('checkBox', array
 		(
 			'inputType' 	=>	'checkbox',
 			'label'			=>	array($this->label, $this->description),
@@ -56,7 +56,7 @@ class PatternCheckBox extends \Pattern
 	public function compile()
 	{
 		
-		parent::compile(($this->Value->checkBox) ? true : false);
+		$this->writeToTemplate(($this->Value->checkBox) ? true : false);
 		
 	}
 	
