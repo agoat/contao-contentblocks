@@ -36,7 +36,7 @@ if (!\Config::get('disableVisualSelect'))
 }
 
 // new options callback to get new content block elements
-$GLOBALS['TL_DCA']['tl_content']['fields']['type']['options_callback'] = array('tl_content_element', 'getContentElements');
+$GLOBALS['TL_DCA']['tl_content']['fields']['type']['options_callback'] = array('tl_content_element', 'getContentBlockElements');
 
 // set new default element
 $GLOBALS['TL_DCA']['tl_content']['fields']['type']['load_callback'] = array(array('tl_content_element', 'setDefaultType'));
@@ -87,7 +87,7 @@ class tl_content_element extends tl_content
 	/**
 	 * generate content element list for type selection
 	 */
-	public function getContentElements ($dc)
+	public function getContentBlockElements ($dc)
 	{
 		// try to get the theme id
 		$intLayoutId = \ContentBlocks::getLayoutId($dc->activeRecord->ptable,  $dc->activeRecord->pid);

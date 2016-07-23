@@ -108,12 +108,11 @@ abstract class Pattern extends \Controller
 		return $this->arrData;
 	}	
 
-	
 	/**
 	 * construct the DCA array
 	 *
 	 */
-	public function construct($strFieldName, $arrFieldDCA=array(), $bolLoadSaveCallback=true)
+	public function generateDCA($strFieldName, $arrFieldDCA=array(), $bolLoadSaveCallback=true)
 	{
 		$strVirtualField = $this->virtualFieldName($strFieldName);
 		
@@ -157,7 +156,7 @@ abstract class Pattern extends \Controller
 	 * push the values to the template object
 	 *
 	 */
-	public function compile($Value)
+	public function writeToTemplate($Value)
 	{
 
 		if ($this->replicaAlias)

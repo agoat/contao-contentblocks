@@ -62,7 +62,7 @@ class PatternModule extends \Pattern
 		/** @var \Module $objModule */
 		$objModule = new $strClass($objModule);
 		
-		parent::compile($objModule->generate());
+		$this->writeToTemplate($objModule->generate());
 		
 	}
 

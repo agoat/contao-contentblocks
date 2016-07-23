@@ -52,7 +52,7 @@ class PatternSelectField extends \Pattern
 		}
 
 
-		parent::construct('selectField', array
+		$this->generateDCA('selectField', array
 		(
 			'inputType' 	=>	'select',
 			'label'			=>	array($this->label, $this->description),
@@ -111,7 +111,7 @@ class PatternSelectField extends \Pattern
 	public function compile()
 	{
 		
-		parent::compile(substr($this->Value->selectField,1));
+		$this->writeToTemplate(substr($this->Value->selectField,1));
 		
 	}
 	

@@ -66,7 +66,7 @@ class PatternFileTree extends \Pattern
 		if ($this->multiSource)
 		{
 			// the multiSRC field
-			parent::construct('multiSRC', array
+			$this->generateDCA('multiSRC', array
 			(
 				'inputType' =>	'fileTree',
 				'label'		=>	array($this->label, $this->description),
@@ -96,7 +96,7 @@ class PatternFileTree extends \Pattern
 		else
 		{
 			// the singleSRC field
-			parent::construct('singleSRC', array
+			$this->generateDCA('singleSRC', array
 			(
 				'inputType' =>	'fileTree',
 				'label'		=>	array($this->label, $this->description),
@@ -115,7 +115,7 @@ class PatternFileTree extends \Pattern
 		// the size field
 		if ($this->source == 'image' && $this->canChangeSize)
 		{
-			parent::construct('size', array
+			$this->generateDCA('size', array
 			(
 				'label'				=> &$GLOBALS['TL_LANG']['tl_content']['size'],
 				'inputType'			=> 'imageSize',
@@ -140,7 +140,7 @@ class PatternFileTree extends \Pattern
 		// the sortBy field
 		if ($this->multiSource && $this->canChangeSortBy)
 		{
-			parent::construct('sortBy', array
+			$this->generateDCA('sortBy', array
 			(
 				'inputType'               => 'select',
 				'label'                   => &$GLOBALS['TL_LANG']['tl_content']['sortBy'],
@@ -623,7 +623,7 @@ class PatternFileTree extends \Pattern
 			$files = $files[0];
 		}
 
-		parent::compile($files);
+		$this->writeToTemplate($files);
 
 	}
 

@@ -47,7 +47,7 @@ class PatternForm extends \Pattern
 		$objForm = new \Form($this);
 		$objForm->formTemplate = $this->formTemplate;
 		
-		parent::compile($objForm->generate());		
+		$this->writeToTemplate($objForm->generate());		
 	}
 
 
