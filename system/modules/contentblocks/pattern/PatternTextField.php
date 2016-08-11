@@ -131,7 +131,7 @@ class PatternTextField extends \Pattern
 	 */
 	public function compile()
 	{
-		$this->writeToTemplate(($this->multiple) ? deserialize($this->Value->multiField) : $this->Value->textField);	
+		$this->writeToTemplate(($this->picker != 'unit') ? ($this->multiple) ? deserialize($this->Value->multiField) : $this->Value->textField : deserialize($this->Value->inputUnit));	
 	}
 	
 }
