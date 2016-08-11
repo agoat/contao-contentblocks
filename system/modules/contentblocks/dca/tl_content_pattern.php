@@ -524,7 +524,7 @@ $GLOBALS['TL_DCA']['tl_content_pattern'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_content_pattern']['picker'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options'				  => array('date', 'color', 'page','unit'),
+			'options'				  => array('datetime', 'color', 'page', 'unit'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_content_pattern'],
 			'eval'                    => array('submitOnChange'=>true, 'includeBlankOption'=>true, 'tl_class'=>'w50'),
 			'save_callback' => array
