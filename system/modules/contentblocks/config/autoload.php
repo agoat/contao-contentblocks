@@ -69,5 +69,7 @@ TemplateLoader::addFiles(array
 	'cb_debug' => 'system/modules/contentblocks/templates',
 	'tinymce_standard' => 'system/modules/contentblocks/templates',
 	'tinymce_simple' => 'system/modules/contentblocks/templates',
+	'be_tinyMCEpattern' => 'system/modules/contentblocks/templates',
+	'be_tinyMCEexplanation' => 'system/modules/contentblocks/templates',
 ));
 
