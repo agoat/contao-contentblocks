@@ -156,7 +156,11 @@ class ContentBlockElement extends \ContentElement
 			else
 			{
 				
-				$colValue = \ContentValueModel::findByCidandPid($this->id, $objPattern->id);
+				// get correct element id (included content element) see #37
+				$Cid = ($this->origId) ? $this->origId : $this->id;
+				
+				// get the values
+				$colValue = \ContentValueModel::findByCidandPid($Cid, $objPattern->id);
 				
 				if ($colValue === null)
 				{
@@ -164,7 +168,7 @@ class ContentBlockElement extends \ContentElement
 				}
 				
 				$objPatternClass = new $strClass($objPattern);
-				$objPatternClass->cid = $this->id;
+				$objPatternClass->cid = $Cid;
 				$objPatternClass->cpid = $this->pid;
 				$objPatternClass->cptable = $this->ptable;
 				$objPatternClass->replicaAlias = $strReplicaAlias;					
