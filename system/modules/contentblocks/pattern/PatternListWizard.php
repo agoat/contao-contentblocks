@@ -34,6 +34,7 @@ class PatternListWizard extends \Pattern
 			(
 				'mandatory'		=>	($this->mandatory) ? true : false, 
 				'allowHtml'		=>	true,
+				'tl_class'		=>	'clr'
 			),
 			'xlabel' => array
 			(
