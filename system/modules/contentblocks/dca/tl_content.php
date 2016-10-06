@@ -184,6 +184,12 @@ class tl_content_element extends tl_content
 	 */
 	public function buildPaletteAndFields ($dc)
 	{
+		// build the content block elements palette and fields only when editing a content element (see agoat/contao-contentblocks-bundle#5)
+		if (\Input::get('act') != 'edit')
+		{
+			return;
+		}
+		
 		// get content	
 		$objContent = \ContentModel::findByPk($dc->id);
 	
