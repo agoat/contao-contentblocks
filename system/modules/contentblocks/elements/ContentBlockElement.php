@@ -104,14 +104,21 @@ class ContentBlockElement extends \ContentElement
 		}
 
 		$this->Template = new \ContentBlockTemplate($this->strTemplate);
-		$this->Template->setData($this->arrData);
-		$this->Template->inColumn = $this->strColumn;
-
-		if (!empty($this->objModel->classes) && is_array($this->objModel->classes))
-		{
-			$this->Template->class .= ' ' . implode(' ', $this->objModel->classes);
-		}
-
+		
+		// deliver some general element data
+		$this->Template->setData(
+			array (
+				'id' => $this->id,
+				'pid' => $this->pid,
+				'ptable' => $this->ptable,
+				'tstamp' => $this->tstamp,
+				'start' => $this->start,
+				'stop' => $this->stop,
+				'protected' => $this->protected,
+				'inColumn' => $this->strColumn
+			)
+		);
+		// get pattern and values
 		$this->compile();
 		
 		return $this->Template->parse();
