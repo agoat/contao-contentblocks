@@ -76,7 +76,7 @@ class tl_content_element extends tl_content
 		// get block element
 		$objBlock = \ContentBlocksModel::findOneByAlias($arrRow['type']);
 		
-		$return = \tl_content::addCteType($arrRow);
+		$return = parent::addCteType($arrRow);
 		return ($objBlock->invisible) ? substr_replace($return, ' <span style="color: #b3b3b3;">(invisible content block)</div>', strpos($return, '</div>')) : $return;
 
 	}
