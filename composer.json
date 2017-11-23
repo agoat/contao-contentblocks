@@ -1,6 +1,6 @@
 {
     "name": "agoat/contentblocks-bundle",
-    "description": "Contao 4 content blocks",
+    "description": "Contao 3 content blocks extension",
     "type": "contao-bundle",
     "license": "LGPL-3.0+",
     "authors": [
@@ -34,5 +34,5 @@
             "src/Resources/contao/languages",
             "src/Resources/contao/templates"
         ]
-    },
+    }
 }
